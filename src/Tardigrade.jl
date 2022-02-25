@@ -2,10 +2,9 @@ module Tardigrade
 
 include("parser/Parser.jl")
 include("mesh/Mesh.jl")
+include("variables/Variables.jl")
 include("quadrature_templates/QuadratureTemplates.jl")
 include("function_spaces/FunctionSpaces.jl")
-
-# using .Mesh : initialize_mesh
 
 function setup_mesh(input_settings)
     mesh = Mesh.initialize_mesh(Parser.parse_mesh_block(input_settings))
@@ -13,7 +12,9 @@ function setup_mesh(input_settings)
 end
 
 function setup_variables(input_settings)
-    variable_block = Parser.parse_variables_block(input_settings)
+    variables_block = Parser.parse_variables_block(input_settings)
+    variables = Variables.initialize_variables(variables_block)
+    return variables
 end
 
 function tardigrade()
@@ -25,7 +26,8 @@ function tardigrade()
     @time mesh = setup_mesh(input_settings)
     @time mesh = setup_mesh(input_settings)
 
-    variables = setup_variables(input_settings)
+    @time variables = setup_variables(input_settings)
+    @time variables = setup_variables(input_settings)
     # println(mesh)
 end
 

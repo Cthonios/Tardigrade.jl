@@ -35,24 +35,31 @@ end
 function parse_variables_block(input_settings)
     try
         variables_block = input_settings["variables"]
-        for variable in variables_block
-            println(variable["variable name"])
-            println(variable["quadrature order"])
+        for key in keys(input_settings["variables"])
+            # input_settings[key]["variable name"]
+            # input_settings[key]["function space family"]
+            # @assert input_settings[key]["function space order"] > 0
+            # @assert input_settings[key]["quadrature order"] > 0
+            # @assert size(input_settings[key]["blocks"]) > 0
         end
+        return variables_block
     catch error
         if isa(error, KeyError)
             msg = "Error in variables block\nCorrect syntax is...\n\n\n"
             msg = msg * "variables:\n  -variable name: <str>\n"
-            msg = msg * "   quadrature_order: <int>\n"
+            msg = msg * "   function space family: <str>\n"
+            msg = msg * "   function space order: <int>\n"
+            msg = msg * "   quadrature order: <int>\n"
             msg = msg * "   blocks: <list<int>>\n"
             msg = msg * "  -variable name: <str>\n"
-            msg = msg * "   quadrature_order: <int>\n"
+            msg = msg * "   function space family: <str>\n"
+            msg = msg * "   function space order: <int>\n"
+            msg = msg * "   quadrature order: <int>\n"
             msg = msg * "   blocks: <list<int>>\n"
             msg = msg * "  ... etc. ...\n\n"
             throw(AssertionError(msg))
         end
     end
-    return input_settings["variables"]
 end
 
 function parse_kernels_block(input_settings)

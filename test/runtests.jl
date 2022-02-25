@@ -1,8 +1,14 @@
 using Test
 
+include("./parser/test_parser.jl")
 include("./mesh/test_mesh.jl")
 include("./quadrature_templates/test_quadrature.jl")
 include("./function_spaces/test_function_spaces.jl")
+
+test_set_name = rpad("parser", 64)
+@testset "$test_set_name" begin
+    test_input_files()
+end
 
 test_set_name = rpad("mesh io", 64)
 @testset "$test_set_name" begin
