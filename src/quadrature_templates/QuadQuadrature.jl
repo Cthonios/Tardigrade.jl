@@ -1,4 +1,4 @@
-function quad_quadrature_points_init!(quadrature_order::Int,
+function quad_quadrature_points_init!(quadrature_order::Int8,
                                       w::Array{Float64,1},
                                       ξ::Array{Float64,2})
     if quadrature_order == 1

@@ -66,4 +66,17 @@ function parse_kernels_block(input_settings)
     return input_settings["kernels"]
 end
 
+function parse_boundary_conditions_block(input_settings)
+    # TODO add error checking here so we can isolate them from the code
+
+    # look to see if variables are defined
+    #
+    # variables_block = parse_variables_block(input_settings)
+    # variables = Array()
+    # for bc in input_settings["boundary conditions"]
+
+
+    return input_settings["boundary conditions"]
+end
+
 end

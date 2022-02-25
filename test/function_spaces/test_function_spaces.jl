@@ -3,14 +3,14 @@ using Tardigrade.FunctionSpaces
 
 # TODO: add tri 3 element tests
 
-function quad4_reference_element(quadrature_order::Int)
+function quad4_reference_element(quadrature_order::Int8)
     return FunctionSpaces.reference_element_factory("QUAD4", quadrature_order)
 end
 
 function test_quad_element_reference_element()
     one = 1.0
     fourth = 1.0 / 4.0
-    element = quad4_reference_element(1)
+    element = quad4_reference_element(convert(Int8, 1))
     test_set_name = rpad("QUAD4 q1 shape function values", 64)
     @testset "$test_set_name" begin
         @test element.Nξ[1, 1] == fourth
@@ -31,7 +31,7 @@ function test_quad_element_reference_element()
         @test element.∇Nξ[4, 2, 1] == fourth
     end
 
-    element = quad4_reference_element(2)
+    element = quad4_reference_element(convert(Int8, 2))
     test_set_name = rpad("QUAD4 q2 shape function values", 64)
     @testset "$test_set_name" begin
         @test element.Nξ[1, 1] == fourth * (1.0 + 1.0 / √3) * (1.0 + 1.0 / √3)

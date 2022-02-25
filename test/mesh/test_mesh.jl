@@ -69,7 +69,7 @@ function test_square_mesh(n::Int)
         @test mesh.Nₙ == number_of_nodes[n]
         @test mesh.Nₑ == number_of_elements[n]
         @test size(mesh.blocks, 1) == 1
-        @test size(mesh.node_sets, 1) == 4
+        @test size(mesh.nodesets, 1) == 4
     end
 end
 

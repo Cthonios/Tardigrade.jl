@@ -13,7 +13,7 @@ abstract type AbstractVariable end
 end
 
 function initialize_variable(input_settings)
-    return Variable(name=input_settings["variable_name"],
+    return Variable(name=input_settings["variable name"],
                     function_space_family=input_settings["function space family"],
                     function_space_order=input_settings["function space order"],
                     quadrature_order=input_settings["quadrature order"],

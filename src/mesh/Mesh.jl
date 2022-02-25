@@ -16,7 +16,7 @@ struct MeshStruct
     N_node_sets::Int64
     coords::Array{Float64} # coordinates
     blocks::Array{Block,1}
-    node_sets::Array{NodeSet,1}
+    nodesets::Array{NodeSet,1}
     # TODO: add side sets
 end
 
@@ -33,7 +33,7 @@ function initialize_mesh(file_name::String)::MeshStruct
         blocks = Array{Block,1}(undef, exo.num_blks())
         initialize_blocks!(exo, blocks)
         #
-        # setup node sets, TODO: add optional nodeset in parser
+        # setup node sets, TODO: add optional nodesets in parser
         #
         node_sets = Array{NodeSet,1}(undef, exo.num_node_sets())
         initialize_node_sets!(exo, node_sets)

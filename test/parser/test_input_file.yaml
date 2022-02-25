@@ -9,12 +9,15 @@ variables:
     blocks: [1]
 
 kernels:
-  - kernel type: laplacian
+  - kernel type: poisson
     primary variable name: u
-  - kernel type: constant scalar source
-    constant value: 1.0
+  # - kernel type: laplacian
+  #   primary variable name: u
+  # - kernel type: constant scalar source
+  #   constant value: 1.0
 
 boundary conditions:
-  - boundary condition type: constant dirichlet
+  - boundary condition type: constant scalar dirichlet
+    variable: u
     constant value: 0.0
     node sets: [1, 2, 3, 4]

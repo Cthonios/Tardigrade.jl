@@ -1,12 +1,12 @@
 using Tardigrade.QuadratureTemplates
 
 function test_quad_element_quadrature_template()
-    quad = QuadratureTemplates.quadrature_factory("QUAD4", 1)
+    quad = QuadratureTemplates.quadrature_factory("QUAD4", convert(Int8, 1))
     @test quad.w[1] == 4.0
     @test quad.ξ[1, 1] == 0.0
     @test quad.ξ[1, 2] == 0.0
 
-    quad = QuadratureTemplates.quadrature_factory("QUAD4", 2)
+    quad = QuadratureTemplates.quadrature_factory("QUAD4", convert(Int8, 2))
     for i=1:quad.Nq
         @test quad.w[i] == 1.0
     end

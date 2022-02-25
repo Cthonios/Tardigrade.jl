@@ -11,7 +11,7 @@ struct QuadraturePoints
     ξ::Array{Float64,2} # general type that is really Array{Float64,N_dimensions}
 end
 
-function quadrature_factory(element_type::String, quadrature_order::Int)
+function quadrature_factory(element_type::String, quadrature_order::Int8)
     if element_type == "QUAD4"
         w = zeros(Float64, quadrature_order^2)
         ξ = zeros(Float64, quadrature_order^2, 2)
