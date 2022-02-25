@@ -22,5 +22,7 @@ end
 
 test_set_name = rpad("function space correctness tests", 64)
 @testset "$test_set_name" begin
-    test_quad_element_reference_element()
+    test_quad_calculate_shape_function_values()
+    test_quad_calculate_shape_function_gradients()
+    test_J_on_quad_element()
 end

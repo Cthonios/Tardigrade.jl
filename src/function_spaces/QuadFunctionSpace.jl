@@ -1,36 +1,38 @@
 using ..QuadratureTemplates
 
-function quad_reference_element_init!(shape_function_order::Int8,
-                                      quadrature::QuadraturePoints,
-                                      Nξ::Array{Float64,2},
-                                      ∇Nξ::Array{Float64,3})
+function quad4_calculate_shape_function_values(shape_function_order,
+                                               q_point::Vector{Float64})
     one = 1.0
     fourth = 1.0 / 4.0
+    ξ, η = q_point[1], q_point[2]
     if shape_function_order == 1
-        for q = 1:quadrature.Nq
-            ξ = quadrature.ξ[q, 1]
-            η = quadrature.ξ[q, 2]
-
-            # shape function values
-            #
-            Nξ[1, q] = fourth * (one - ξ) * (one - η)
-            Nξ[2, q] = fourth * (one + ξ) * (one - η)
-            Nξ[3, q] = fourth * (one + ξ) * (one + η)
-            Nξ[4, q] = fourth * (one - ξ) * (one + η)
-
-            # shape function gradients on reference element
-            #
-            ∇Nξ[1, 1, q] = -fourth * (one - η)
-            ∇Nξ[1, 2, q] = -fourth * (one - ξ)
-            #
-            ∇Nξ[2, 1, q] = fourth * (one - η)
-            ∇Nξ[2, 2, q] = -fourth * (one + ξ)
-            #
-            ∇Nξ[3, 1, q] = fourth * (one + η)
-            ∇Nξ[3, 2, q] = fourth * (one + ξ)
-            #
-            ∇Nξ[4, 1, q] = -fourth * (one + η)
-            ∇Nξ[4, 2, q] = fourth * (one - ξ)
-        end
+        Nξ = fourth * [(one - ξ) * (one - η),
+                       (one + ξ) * (one - η),
+                       (one + ξ) * (one + η),
+                       (one - ξ) * (one + η)]
     end
+    return Nξ
+end
+
+function quad4_calculate_shape_function_gradients(shape_function_order,
+                                                  q_point::Vector{Float64})
+    one = 1.0
+    fourth = 1.0 / 4.0
+    ξ, η = q_point[1], q_point[2]
+    ∇Nξ = zeros(Float64, 4, 2)
+    if shape_function_order == 1
+        ∇Nξ[1, 1] = -fourth * (one - η)
+        ∇Nξ[1, 2] = -fourth * (one - ξ)
+        #
+        ∇Nξ[2, 1] = fourth * (one - η)
+        ∇Nξ[2, 2] = -fourth * (one + ξ)
+        #
+        ∇Nξ[3, 1] = fourth * (one + η)
+        ∇Nξ[3, 2] = fourth * (one + ξ)
+        #
+        ∇Nξ[4, 1] = -fourth * (one + η)
+        ∇Nξ[4, 2] = fourth * (one - ξ)
+    end
+
+    return ∇Nξ
 end

@@ -38,15 +38,20 @@ function setup_quadrature(mesh, variables)
     return quadrature_rules
 end
 
-function setup_reference_elements(mesh, variables)
-    reference_elements =
-    Array{FunctionSpaces.ReferenceElement}(undef, size(variables, 1))
-    for m = 1:size(variables, 1)
-        reference_elements =
-        FunctionSpaces.reference_element_factory("QUAD4", variables[m].function_space_order)
-    end
-    return reference_elements
+# function setup_reference_elements(mesh, variables)
+#     reference_elements =
+#     Array{FunctionSpaces.ReferenceElement}(undef, size(variables, 1))
+#     for m = 1:size(variables, 1)
+#         reference_elements =
+#         FunctionSpaces.reference_element_factory("QUAD4", variables[m].function_space_order)
+#     end
+#     return reference_elements
+# end
+
+function setup_function_spaces(mesh, variables)
+
 end
+
 
 function setup_boundary_conditions(input_settings, mesh, variables)
     bc_input_settings = Parser.parse_boundary_conditions_block(input_settings)
