@@ -1,16 +1,16 @@
 mesh:
-  file name: './test/mesh/mesh_test_0.015625.g'
+  file name: './boundary_conditions/mesh_test_0.0078125.g'
 
 variables:
   - variable name: u
     function space family: lagrange
     function space order: 1
-    quadrature order: 2
+    quadrature order: 1
     blocks: [1]
 
 kernels:
-  - kernel name: poisson
-    primary variable: u
+  - kernel type: poisson
+    primary variable name: u
 
 boundary conditions:
   - boundary condition type: constant scalar dirichlet

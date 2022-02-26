@@ -5,6 +5,8 @@ include("mesh/Mesh.jl")
 include("variables/Variables.jl")
 include("quadrature_templates/QuadratureTemplates.jl")
 include("function_spaces/FunctionSpaces.jl")
+include("boundary_conditions/BoundaryConditions.jl")
+include("post_processor/PostProcessor.jl")
 
 function setup_mesh(input_settings)
     mesh = Mesh.initialize_mesh(Parser.parse_mesh_block(input_settings))

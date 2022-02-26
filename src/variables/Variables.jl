@@ -7,8 +7,8 @@ abstract type AbstractVariable end
 @with_kw struct Variable <: AbstractVariable
     name::String
     function_space_family::String = "lagrange"
-    function_space_order::Int8 = 1
-    quadrature_order::Int8 = 1
+    function_space_order::Int64 = 1
+    quadrature_order::Int64 = 1
     blocks::Array{Int64,1}
 end
 

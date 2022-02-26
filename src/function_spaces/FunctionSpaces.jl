@@ -5,9 +5,8 @@ using ..QuadratureTemplates
 
 function function_space_factory(element_type::String)
     if element_type == "QUAD4"
-        one = 1
-        Nξ(x::Vector{Float64}) = quad4_calculate_shape_function_values(one, x)
-        ∇Nξ(x::Vector{Float64}) = quad4_calculate_shape_function_gradients(one, x)
+        Nξ(x::Vector{Float64}) = quad4_calculate_shape_function_values(x)
+        ∇Nξ(x::Vector{Float64}) = quad4_calculate_shape_function_gradients(x)
         return Nξ, ∇Nξ
     else
         throw(AssertionError("Unsupported element type"))
