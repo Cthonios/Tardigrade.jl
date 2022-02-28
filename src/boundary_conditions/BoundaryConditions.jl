@@ -36,11 +36,6 @@ function initialize_boundary_condition(input_settings, mesh, bc_type)
         end
     end
 
-    # nodes = convert(Array{Int64,1}, nodes)
-    # println(nodes)
-    # println(size(nodes))
-    # println(convert(Array{Int64,1}, nodes))
-
     return bc_type(input_settings["variable"],
                    nodes,
                    input_settings["constant value"])  # TODO need to do args approach here
@@ -52,6 +47,45 @@ function boundary_condition_factory(input_settings, mesh)
                                              ConstantScalarDirichletBC)
     else
         throw(AssertionError("Unsupported boundary condition"))
+    end
+end
+
+function update_bc_solution!(bc, u)
+    @inbounds u[bc.nodes] .= bc.value
+end
+
+function update_bcs_solution!(bcs, u)
+    @simd for bc = 1:size(bcs, 1)
+        @inbounds update_bc_solution!(bcs[bc], u)
+    end
+end
+
+function update_bc_residual!(bc, R)
+    @inbounds R[bc.nodes] .= 0.0
+end
+
+function update_bcs_residual!(bcs, R)
+    @simd for bc = 1:size(bcs, 1)
+        @inbounds update_bc_residual!(bcs[bc], R)
+    end
+end
+
+function update_bc_tangent!(bc, K)
+    @simd for node in bc.nodes
+        @inbounds K[node, node] = 1.0e6
+    end
+end
+
+function update_bcs_tangent!(bcs, K)
+    @simd for bc = 1:size(bcs, 1)
+        update_bc_tangent!(bcs[bc], K)
+    end
+end
+
+function update_bcs_residual_and_tangent!(bcs, R, K)
+    @simd for bc = 1:size(bcs,1)
+        update_bc_residual!(bcs[bc], R)
+        update_bc_tangent!(bcs[bc], K)
     end
 end
 

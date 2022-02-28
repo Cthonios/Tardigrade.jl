@@ -1,5 +1,5 @@
 mesh:
-  file name: './test/mesh/mesh_test_0.015625.g'
+  file name: './test/mesh/mesh_test_0.0078125.g'
 
 variables:
   - variable name: u

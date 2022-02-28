@@ -94,7 +94,11 @@ function poisson_equation()
     # @show boundary_conditions
 
     @time u = solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇Nξ_methods)
-    # @time u = solve(mesh, boundary_conditions, quadrature, Nξ_methods, ∇Nξ_methods)
+    @time u = solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇Nξ_methods)
+    @time u = solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇Nξ_methods)
+    @time u = solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇Nξ_methods)
+    @time u = solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇Nξ_methods)
+
 
     mesh_file_name = Parser.parse_mesh_block(input_settings)
     @time exo = PostProcessor.copy_mesh_to_exodus_database(mesh_file_name)
@@ -108,75 +112,53 @@ function solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇N
     println("solving")
 
     tolerance = 1000.0
-    coords = mesh.coords
     conn = mesh.blocks[1].connectivity
-    # u = ones(Float64, mesh.Nₙ)
+    coords = mesh.coords[conn, :]
     u = ones(Float64, mesh.Nₙ)
+    R = zeros(Float64, mesh.Nₙ)
+    K = spzeros(Float64, mesh.Nₙ, mesh.Nₙ)
+    R_e = zeros(Float64, mesh.blocks[1].Nₙ_per_e)
+    K_e = zeros(Float64, mesh.blocks[1].Nₙ_per_e, mesh.blocks[1].Nₙ_per_e)
+    local_us = zeros(Float64, mesh.blocks[1].Nₑ, mesh.blocks[1].Nₙ_per_e)
+    Δu = zeros(Float64, mesh.Nₙ)
     while tolerance > 1.0e-12
+        K .= zero(Float64)
+        R .= zero(Float64)
 
         # update bcs
         #
-        @simd for bc in boundary_conditions
-            @simd for node in bc.nodes
-                u[node] = bc.value
-            end
-        end
-
-        R = zeros(Float64, mesh.Nₙ)
-        K = zeros(Float64, mesh.Nₙ, mesh.Nₙ)
-        # K = spzeros(Float64, mesh.Nₙ, mesh.Nₙ)
-        # K =
-
-        R_e = zeros(Float64, 4)
-        K_e = zeros(Float64, 4, 4)
-        local_coords = zeros(Float64, 4, 2)
-        local_u = zeros(Float64, 4)
+        BoundaryConditions.update_bcs_solution!(boundary_conditions, u)
 
         # calculate residual
         #
+        local_us .= zero(Float64)
+        @simd for e=1:mesh.blocks[1].Nₑ
+            @simd for i=1:mesh.blocks[1].Nₙ_per_e
+                @inbounds local_us[e, i] = u[conn[e, i]]
+            end
+        end
+
         @simd for e = 1:mesh.Nₑ
-            local_nodes = conn[4*(e - 1) + 1:4*e]
-            local_coords .= zero(Float64)
-            @simd for i=1:4
-                @simd for j=1:2
-                    local_coords[i, j] = mesh.coords[local_nodes[i], j]
-                end
-            end
-
-            local_u .= zero(Float64)
-            @simd for i=1:4
-                local_u[i] = u[local_nodes[i]]
-            end
-
             R_e .= zero(Float64)
             K_e .= zero(Float64)
-            kernels[1](local_coords, local_u, quadrature[1],
+            kernels[1](coords[e, :, :], local_us[e, :], quadrature[1],
             Nξ_methods[1], ∇Nξ_methods[1], R_e, K_e)
 
             @simd for i=1:4
-                R[local_nodes[i]] += R_e[i]
-            end
-            @simd for j=1:4
-                @simd for i=1:4
-                    K[local_nodes[i], local_nodes[j]] += K_e[i, j]
+                @inbounds R[conn[e, i]] += R_e[i]
+                @simd for j=1:4
+                    @inbounds K[conn[e, i], conn[e, j]] += K_e[i, j]
                 end
             end
         end
 
         # update bcs
         #
-        @simd for bc in boundary_conditions
-            @simd for node in bc.nodes
-                R[node] = 0.0
-                K[node, node] = 1.0
-            end
-        end
+        BoundaryConditions.update_bcs_residual_and_tangent!(boundary_conditions, R, K)
 
-        K = sparse(K)
-
-        # Δu = K \ R
-        Δu = cg(K, R)
-        u = u - Δu
+        Δu .= zero(Float64)
+        cg!(Δu, K, R)
+        u .= u - Δu
 
         # check residual
         #

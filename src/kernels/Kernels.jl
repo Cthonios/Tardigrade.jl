@@ -19,15 +19,7 @@ abstract type AbstractKernel end
 end
 
 function kernel_factory(input_settings)
-    # if input_settings["kernel name"] == "laplacian"
-    #     # TODO: link to a Laplacian kernel
-    #     include("./Laplacian.jl")
-    #     return Kernel()
     if input_settings["kernel name"] == "poisson"
-        # return Kernel(name="poisson",
-        # primary_variable="u",
-        # blocks=[1],
-        # update_kernel_method=update_poisson_kernel_at_qp!)
         return update_poisson_kernel_at_qp!
     else
         throw(AssertionError("Unsupported kernel"))
