@@ -1,8 +1,10 @@
 module Kernels
 
-include("./Poisson.jl")
-
 using Parameters
+# using Tardigrade.FunctionSpaces
+# using ..FunctionSpaces
+
+include("./Poisson.jl")
 
 abstract type AbstractKernel end
 
@@ -25,22 +27,5 @@ function kernel_factory(input_settings)
         throw(AssertionError("Unsupported kernel"))
     end
 end
-
-# function build_residual_functions_at_quadrature_points()
-#
-# end
-#
-# function build_tangent_methods_at_quadrature_points()
-# end
-#
-#
-#
-# function calculate_element_level_residual()
-#
-# end
-#
-# function calculate_element_level_tangent()
-#
-# end
 
 end

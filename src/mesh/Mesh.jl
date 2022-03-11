@@ -8,6 +8,8 @@ include("./NodeSet.jl")
 
 # TODO: implement SideSet struct
 #
+export initialize_mesh
+export MeshStruct
 
 struct MeshStruct
     Nₙ::Int64              # number of nodes

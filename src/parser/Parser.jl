@@ -2,6 +2,12 @@ module Parser
 
 using YAML
 
+export read_input_file
+export parse_mesh_block
+export parse_variables_block
+export parse_kernels_block
+export parse_boundary_conditions_block
+
 function read_input_file(input_file)
     input_settings = YAML.load_file(input_file)
     return input_settings

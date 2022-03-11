@@ -1,97 +1,34 @@
-include("parser/Parser.jl")
-include("mesh/Mesh.jl")
-include("variables/Variables.jl")
-include("quadrature_templates/QuadratureTemplates.jl")
-include("function_spaces/FunctionSpaces.jl")
-include("boundary_conditions/BoundaryConditions.jl")
-include("kernels/Kernels.jl")
-include("post_processor/PostProcessor.jl")
+include("Tardigrade.jl")
 
 using LinearAlgebra
 using SparseArrays
 using IterativeSolvers
 using Printf
 
-function setup_mesh(input_settings)
-    mesh = Mesh.initialize_mesh(Parser.parse_mesh_block(input_settings))
-    return mesh
-end
+import Tardigrade.read_input_file
+import Tardigrade.parse_mesh_block
 
-function setup_variables(input_settings)
-    variables_block = Parser.parse_variables_block(input_settings)
-    variables = Variables.initialize_variables(variables_block)
-    return variables
-end
+import Tardigrade.setup_mesh
+import Tardigrade.setup_variables
+import Tardigrade.setup_quadrature
+import Tardigrade.setup_function_space_methods
+import Tardigrade.setup_kernels
+import Tardigrade.setup_boundary_conditions
+import Tardigrade.update_bcs_solution!
+import Tardigrade.update_bcs_residual_and_tangent!
 
-function setup_quadrature(mesh, variables)
-    quadrature_rules =
-    Array{QuadratureTemplates.QuadraturePoints}(undef, size(variables, 1))  # limitation here that all blocks have the same rule
-    for m = 1:size(variables, 1)
-        # TODO: make below general to hook up other elements
-        quadrature_rules[m] =
-        QuadratureTemplates.quadrature_factory("QUAD4", variables[m].quadrature_order)
-        # for n = 1:size(mesh.blocks, 1)
-        #
-        #     # TODO: need serious checking on block vs. variable
-        #     # TODO: shape functions and quadrature rules
-        #     #
-        #     println(mesh.blocks[n])
-        #     # quadrature_rules[m, n] = quadrature_factory(mesh.blocks)
-        # end
-    end
-    return quadrature_rules
-end
-
-function setup_function_space_methods(mesh, variables)
-    Nξ_methods =
-    Array{Any}(undef, size(variables, 1))
-    ∇Nξ_methods =
-    Array{Any}(undef, size(variables, 1))
-    for m = 1:size(variables, 1)
-        Nξ_methods[m], ∇Nξ_methods[m] =
-        FunctionSpaces.function_space_factory("QUAD4")
-    end
-    return Nξ_methods, ∇Nξ_methods
-end
-
-function setup_kernel(input_settings)
-    kernels_block = Parser.parse_kernels_block(input_settings)
-    println(kernels_block)
-    return Kernels.kernel_factory(kernels_block[1])
-end
-
-function setup_boundary_conditions(input_settings, mesh, variables)
-    bc_input_settings = Parser.parse_boundary_conditions_block(input_settings)
-
-    boundary_conditions = Array{Any}(undef, size(bc_input_settings, 1))
-    for (n, bc) in enumerate(bc_input_settings)
-        boundary_conditions[n] =
-        BoundaryConditions.boundary_condition_factory(bc, mesh)
-    end
-    return boundary_conditions
-end
-
-function poisson_equation()
+function poisson_equation(input_file)
     println("simple example for poisson equation")
-    input_file = ARGS[1]
+    # input_file = ARGS[1]
     @show input_file
-    input_settings = Parser.read_input_file(input_file)
-
-    println("Setting up mesh...")
+    input_settings = read_input_file(input_file)
     @time mesh = setup_mesh(input_settings)
-    println("Setting up variables...")
     @time variables = setup_variables(input_settings)
-    println("Setting up quadrature...")
     @time quadrature = setup_quadrature(mesh, variables)
-    println("Setting up function spaces...")
     @time Nξ_methods, ∇Nξ_methods = setup_function_space_methods(mesh, variables)
-    println("Setting up kernels...")
-    @time kernel = setup_kernel(input_settings)
-    kernels = [kernel]
-
-    println("Setting up boundary conditions...")
+    @time kernels = setup_kernels(input_settings)
+    kernels = [kernels]
     @time boundary_conditions = setup_boundary_conditions(input_settings, mesh, variables)
-    # @show boundary_conditions
 
     @time u = solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇Nξ_methods)
     @time u = solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇Nξ_methods)
@@ -127,7 +64,7 @@ function solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇N
 
         # update bcs
         #
-        BoundaryConditions.update_bcs_solution!(boundary_conditions, u)
+        update_bcs_solution!(boundary_conditions, u)
 
         # calculate residual
         #
@@ -154,7 +91,7 @@ function solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇N
 
         # update bcs
         #
-        BoundaryConditions.update_bcs_residual_and_tangent!(boundary_conditions, R, K)
+        update_bcs_residual_and_tangent!(boundary_conditions, R, K)
 
         Δu .= zero(Float64)
         cg!(Δu, K, R)
@@ -176,4 +113,5 @@ function solve(mesh, boundary_conditions, kernels, quadrature, Nξ_methods, ∇N
     return u
 end
 
-poisson_equation()
+input_file = "test/input_file/test_input_file.yaml"
+poisson_equation(input_file)
