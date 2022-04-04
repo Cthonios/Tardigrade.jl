@@ -3,7 +3,7 @@ module FunctionSpaces
 using LinearAlgebra
 using ..QuadratureTemplates
 
-include("./QuadFunctionSpace.jl")
+include("./function_spaces/QuadFunctionSpace.jl")
 
 export function_space_factory
 export J

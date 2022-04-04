@@ -3,7 +3,7 @@ module QuadratureTemplates
 export QuadraturePoints
 export quadrature_factory
 
-include("./QuadQuadrature.jl")
+include("./quadrature_templates/QuadQuadrature.jl")
 
 struct QuadraturePoints
     Nq::Int

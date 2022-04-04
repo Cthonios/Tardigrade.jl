@@ -1,13 +1,7 @@
 module Mesh
 
-using PyCall
-using Suppressor
+using Exodus
 
-include("./Block.jl")
-include("./NodeSet.jl")
-
-# TODO: implement SideSet struct
-#
 export initialize_mesh
 export MeshStruct
 
@@ -17,61 +11,30 @@ struct MeshStruct
     N_blocks::Int64
     N_node_sets::Int64
     coords::Array{Float64} # coordinates
-    blocks::Array{Block,1}
-    nodesets::Array{NodeSet,1}
-    # TODO: add side sets
+    blocks::Exodus.Blocks
+    node_sets::Exodus.NodeSets
 end
 
 function initialize_mesh(file_name::String)::MeshStruct
-    @suppress begin
-        exo = read_exodus_database(file_name)
-        #
-        # get nodal coordinates
-        #
-        coords = read_coordinates(exo)
-        #
-        # setup blocks, TODO: add optional blocks in parser
-        #
-        blocks = Array{Block,1}(undef, exo.num_blks())
-        initialize_blocks!(exo, blocks)
-        #
-        # setup node sets, TODO: add optional nodesets in parser
-        #
-        node_sets = Array{NodeSet,1}(undef, exo.num_node_sets())
-        initialize_node_sets!(exo, node_sets)
-        #
-        # set up mesh data structure
-        #
-        mesh = MeshStruct(exo.num_nodes(), exo.num_elems(),
-                          exo.num_blks(), exo.num_node_sets(),
-                          coords, blocks, node_sets)
-        close_exodus_database(exo)
-        return mesh
-    end
-end
+    message = rpad("Setting up mesh...", 48)
+    print(message)
 
-function read_exodus_database(file_name::String)
-    exodus3 = pyimport("exodus3")
-    return exodus3.exodus(file_name)
-end
+    exo_id = Exodus.open_exodus_database(file_name)
 
-function close_exodus_database(exo)
-    exo.close()
-end
+    init = Exodus.Initialization(exo_id)
 
-function read_coordinates(exo)
-    N_d = exo.num_dimensions()
-    x_coords, y_coords, z_coords = exo.get_coords()
-    coords = zeros(Float64, size(x_coords, 1), N_d)
-    if N_d == 2
-        coords[:, 1] = x_coords
-        coords[:, 2] = y_coords
-    elseif N_d == 3
-        coords[:, 1] = x_coords
-        coords[:, 2] = y_coords
-        coords[:, 3] = z_coords
-    end
-    return coords
+    coords = Exodus.read_coordinates(exo_id, init.num_dim, init.num_nodes)
+
+    block_ids = Exodus.read_block_ids(exo_id, init.num_elem_blk)
+    blocks = Exodus.read_blocks(exo_id, block_ids)
+
+    node_set_ids = Exodus.read_node_set_ids(exo_id, init.num_node_sets)
+    node_sets = Exodus.read_node_sets(exo_id, node_set_ids)
+
+    Exodus.close_exodus_database(exo_id)
+
+    return MeshStruct(init.num_nodes, init.num_nodes, size(blocks, 1), size(node_sets, 1),
+                      coords, blocks, node_sets)
 end
 
 end

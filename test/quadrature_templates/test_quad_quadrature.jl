@@ -1,4 +1,4 @@
-using Tardigrade.QuadratureTemplates
+include("../../src/variables/QuadratureTemplates.jl")
 
 function test_quad_element_quadrature_template()
     quad = QuadratureTemplates.quadrature_factory("QUAD4", 1)

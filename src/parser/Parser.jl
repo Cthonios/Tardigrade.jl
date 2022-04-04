@@ -69,6 +69,7 @@ function parse_variables_block(input_settings)
 end
 
 function parse_kernels_block(input_settings)
+    # TODO add error checking
     return input_settings["kernels"]
 end
 

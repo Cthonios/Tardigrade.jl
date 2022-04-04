@@ -1,35 +1,34 @@
 module Variables
 
+include("./QuadratureTemplates.jl")
+
 using Parameters
 
 abstract type AbstractVariable end
 
-@with_kw struct Variable <: AbstractVariable
+# Needs to contain all the stuff to build shape functions
+# and store the values, make it serial at first then parallel eventually
+#
+mutable struct Variable <: AbstractVariable
     name::String
-    function_space_family::String = "lagrange"
-    function_space_order::Int64 = 1
-    quadrature_order::Int64 = 1
-    blocks::Array{Int64,1}
-end
-
-function initialize_variable(input_settings)
-    return Variable(name=input_settings["variable name"],
-                    function_space_family=input_settings["function space family"],
-                    function_space_order=input_settings["function space order"],
-                    quadrature_order=input_settings["quadrature order"],
-                    blocks=input_settings["blocks"])
-end
-
-function update_variables!(input_settings, variables)
-    for (n, key) in enumerate(keys(input_settings))
-        variables[n] = initialize_variable(input_settings[key])
+    id::Int64
+    values::Vector{Float64}
+    quadrature::QuadratureTemplates.QuadraturePoints
+    # function_space::FunctionSpace
+    function Variable(name::String, id::Int64, 
+                      values::Vector{Float64}, 
+                      quadrature::QuadratureTemplates.QuadraturePoints)
+        return new(name, id, values, quadrature)
     end
-    return variables
 end
 
-function initialize_variables(input_settings)
-    variables = Array{Variable,1}(undef, length(input_settings))
-    update_variables!(input_settings, variables)
+function initialize_variables(variables_blocK::Vector{Dict{Any, Any}})
+    message = rpad("Setting up variables...", 48)
+    print(message)
+
+    for variable_block in variables_blocK
+        @show variable_block
+    end
 end
 
 end

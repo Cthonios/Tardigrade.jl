@@ -1,5 +1,3 @@
-using Tardigrade.QuadratureTemplates
-
 include("./test_quad_quadrature.jl")
 
 function test_quadrature()
