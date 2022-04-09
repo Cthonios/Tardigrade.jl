@@ -42,9 +42,9 @@ uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 
 [[deps.Exodus]]
 deps = ["Exodus_jll", "Pkg", "Profile", "Suppressor", "Test"]
-git-tree-sha1 = "d0c67c54bd77ce0c09646472e45fed8491cef479"
+git-tree-sha1 = "4e4cfec781f09644539d41e7ff5d8712069d34d3"
 uuid = "f57ae99e-f805-4780-bdca-96e224be1e5a"
-version = "0.1.3"
+version = "0.1.4"
 
 [[deps.Exodus_jll]]
 deps = ["Artifacts", "HDF5_jll", "JLLWrappers", "Libdl", "NetCDF_jll", "Pkg", "Zlib_jll"]
@@ -85,9 +85,9 @@ version = "0.21.3"
 
 [[deps.JuliaInterpreter]]
 deps = ["CodeTracking", "InteractiveUtils", "Random", "UUIDs"]
-git-tree-sha1 = "9c43a2eb47147a8776ca2ba489f15a9f6f2906f8"
+git-tree-sha1 = "cd6ce9cee498f6b044357cb439f2a3fea3d450df"
 uuid = "aa1ae85d-cabe-5617-a682-6adf51b2e16a"
-version = "0.9.11"
+version = "0.9.12"
 
 [[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]

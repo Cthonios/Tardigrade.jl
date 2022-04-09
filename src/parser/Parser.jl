@@ -5,6 +5,7 @@ using YAML
 export read_input_file
 export parse_mesh_block
 export parse_variables_block
+export parse_sections_block
 export parse_kernels_block
 export parse_boundary_conditions_block
 
@@ -16,9 +17,11 @@ end
 function parse_input_settings(input_settings)
     mesh = parse_mesh_block(input_settings)
     variables = parse_variables_block(input_settings)
+    sections = parse_sections_block(input_settings)
     kernels = parse_kernels_block(input_settings)
     @show mesh
     @show variables
+    @show sections
     @show kernels
 end
 
@@ -66,6 +69,10 @@ function parse_variables_block(input_settings)
             throw(AssertionError(msg))
         end
     end
+end
+
+function parse_sections_block(input_settings)
+    return input_settings["sections"]
 end
 
 function parse_kernels_block(input_settings)

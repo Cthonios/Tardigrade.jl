@@ -8,7 +8,8 @@ using Printf
 import Tardigrade.read_input_file
 import Tardigrade.parse_mesh_block
 
-import Tardigrade.setup_mesh
+# import Tardigrade.setup_mesh
+import Tardigrade.initialize_mesh
 import Tardigrade.setup_variables
 import Tardigrade.setup_quadrature
 import Tardigrade.setup_function_space_methods
@@ -22,7 +23,8 @@ function poisson_equation(input_file)
     # input_file = ARGS[1]
     @show input_file
     input_settings = read_input_file(input_file)
-    @time mesh = setup_mesh(input_settings)
+    # @time mesh = setup_mesh(input_settings)
+    @time mesh = initialize_mesh(parse_mesh_block(input_settings))
     @time variables = setup_variables(input_settings)
     @time quadrature = setup_quadrature(mesh, variables)
     @time Nξ_methods, ∇Nξ_methods = setup_function_space_methods(mesh, variables)

@@ -1,12 +1,11 @@
 mesh:
-  file name: './mesh/mesh_test_0.0078125.g'
+  file name: './test/mesh/mesh_test_0.5.g'
 
-variables:
-  - variable name: u
-    function space family: lagrange
-    function space order: 1
+variables: [u]
+
+sections:
+  - block: 1
     quadrature order: 2
-    blocks: [1]
 
 kernels:
   - kernel name: poisson

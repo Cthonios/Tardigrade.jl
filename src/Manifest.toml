@@ -2,5 +2,3 @@
 
 julia_version = "1.7.2"
 manifest_format = "2.0"
-
-[deps]
