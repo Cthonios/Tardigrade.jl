@@ -21,6 +21,7 @@ struct Section <: AbstractSection
     N_e::Int64
     N_n::Int64
     N_q::Int64
+    coords::Array{Float64,3}
     conn::Matrix{Float64}
     function_space::FunctionSpace
 end
@@ -47,22 +48,28 @@ function initialize_coordinates(coords::Matrix{Float64}, conn::Matrix{Int64})
     return new_coords
 end
 
-function initialize_sections(sections_settings::Vector{Dict{Any,Any}}, mesh::MeshStruct)
-    sections = Vector{Section}(undef, size(sections_settings, 1))
+function initialize_sections!(sections, sections_settings, mesh)
     for (n, section_settings) in enumerate(sections_settings)
         block_id = section_settings["block"]
         q_order = section_settings["quadrature order"]
 
         block = mesh.blocks[findall(x -> x.block_id == block_id, mesh.blocks)][1]  # this only does 1 block per section
-
-        # q_template = quadrature_factory(block.elem_type, q_order)
         q_template = QuadraturePoints(block.elem_type, q_order)
         conn = initialize_connectivity(block)
         coords = initialize_coordinates(mesh.coords, conn)
-
-        # initialize_function_space(coords, block.elem_type, q_template)
+        N_e, N_n, N_q = block.num_elem, block.num_nodes_per_elem, q_template.Nq
         f_space = FunctionSpace(coords, block.elem_type, q_template)
+
+        sections[n] = Section(N_e, N_n, N_q, coords, conn, f_space)
     end
+end
+
+function initialize_sections(sections_settings::Vector{Dict{Any,Any}}, mesh::MeshStruct)
+    message = rpad("Setting up sections...", 48)
+    print(message)
+    sections = Vector{Section}(undef, size(sections_settings, 1))
+    initialize_sections!(sections, sections_settings, mesh)
+    return sections
 end
 
 end # module

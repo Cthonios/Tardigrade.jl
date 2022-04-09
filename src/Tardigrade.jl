@@ -20,10 +20,9 @@ function tardigrade(input_file::String)
     input_settings = Parser.read_input_file(input_file)
 
     @time mesh = initialize_mesh(parse_mesh_block(input_settings))
-    @time mesh = initialize_mesh(parse_mesh_block(input_settings))
+    @time sections = initialize_sections(parse_sections_block(input_settings), mesh)
 
-    @time initialize_sections(parse_sections_block(input_settings), mesh)
-    @time initialize_sections(parse_sections_block(input_settings), mesh)
+    println()
 end
 
 end # module

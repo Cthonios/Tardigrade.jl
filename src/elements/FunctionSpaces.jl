@@ -41,7 +41,9 @@ function create_function_space_functions(element_type::String)
     end
 end
 
+# TODO:
 # add typing
+# maybe also figure out how to use maps and broadcasts to vectorize this
 function initialize_function_space!(coords, w, ξ, N, ∇N_ξ, Ns, ∇N_ξs, ∇N_Xs, JxWs)
     N_q = size(w, 1)
     N_e = size(coords, 1)
