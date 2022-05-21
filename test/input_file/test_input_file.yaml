@@ -1,18 +1,11 @@
 mesh:
-  file name: './test/mesh/mesh_test_0.5.g'
-
-variables: [u]
+  type: exodus
+  file name: './mesh/mesh_test_0.0078125.g'
 
 sections:
   - block: 1
     quadrature order: 2
 
-kernels:
-  - kernel name: poisson
-    primary variable: u
 
-boundary conditions:
-  - boundary condition type: constant scalar dirichlet
-    variable: u
-    constant value: 0.0
-    node sets: [1, 2, 3, 4]
+
+

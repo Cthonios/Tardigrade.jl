@@ -1,0 +1,20 @@
+# cubit stuff
+history*.jou
+cubit*.jou
+
+# vs code stuff
+.vscode/
+
+# vim stuff
+*.swp
+
+# auto doc stuff, not sure what I will need to keep for hosting
+# declutter in the meantime
+*.js
+*.json
+*.css
+*.html
+
+# exodus stuff, need to mark some as gold or something like that
+*.e
+

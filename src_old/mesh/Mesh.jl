@@ -15,8 +15,8 @@ export initialize_mesh
 export MeshStruct
 
 struct MeshStruct
-    Nₙ::Int64              # number of nodes
-    Nₑ::Int64              # number of elements
+    N_n::Int64              # number of nodes
+    N_e::Int64              # number of elements
     N_blocks::Int64
     N_node_sets::Int64
     coords::Array{Float64} # coordinates
