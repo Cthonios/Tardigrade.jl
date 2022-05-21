@@ -43,13 +43,14 @@ end
 function quad4_quadrature_points_and_weights(q_order::Int64)
     if q_order == 1
         n_q_points = 1
-        xi = zeros(Float64, 1, 2)
-        xi[1, 1] = 0.0
-        xi[1, 2] = 0.0
+        xi = reshape([0.0 0.0], (1, 2)) # maybe not the most elegant
         w = [4.0]
     elseif q_order == 2
         n_q_points = 4
-        xi = (1.0 / sqrt(3.0)) * [-1.0, -1.0; 1.0, -1.0; 1.0, 1.0; -1.0, 1.0]
+        xi = (1.0 / sqrt(3.0)) * [-1.0 -1.0
+                                  1.0 -1.0
+                                  1.0 1.0
+                                  -1.0 1.0]
         w = [1.0, 1.0, 1.0, 1.0]
     else
         quadrautre_order_error(q_order)
@@ -57,6 +58,7 @@ function quad4_quadrature_points_and_weights(q_order::Int64)
     return n_q_points, xi, w
 end
 
+# TODO finish this below
 # """
 # `hex8_quadrature_points_and_weights(q_order::Int64)`
 # """

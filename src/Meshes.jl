@@ -7,7 +7,7 @@ module Meshes
 
 export Connectivity
 export Coordinates
-# export ElementLevelNodalValues
+export ElementLevelNodalValues
 export Mesh
 
 using Base
@@ -71,6 +71,35 @@ Base.iterate(c::Coordinates, node=1) = node > size(c.coordinates, 1) ? nothing :
 Base.length(c::Coordinates) = size(c.coordinates, 1)
 Base.size(c::Coordinates) = size(c.coordinates)
 Base.size(c::Coordinates, dim::Int64) = dim > 2 ? error("coordinates array is 2D") : size(c.coordinates, dim)
+
+
+"""
+`ElementLevelNodalValues`
+
+Interface\n
+`Base.getindex(values::ElementLevelNodalValues, element::Int64)`\n
+`Base.iterate(values::ElementLevelNodalValues, element=1)`\n
+`Base.length(values::ElementLevelNodalValues)`\n
+`Base.size(values::ElementLevelNodalValues)`\n
+`Base.size(values::ElementLevelNodalValues, dim::Int64)`\n
+"""
+struct ElementLevelNodalValues <: FEMContainer
+    values::Array{Float64,3}
+    function ElementLevelNodalValues(coords::Coordinates, conns::Connectivity)
+        values = coords[conns]
+        return new(values)
+    end
+    function ElementLevelNodalValues(values::Matrix{Float64}, conns::Connectivity)
+        new_values = values[conns.connectivity, :]
+        return new(new_values)
+    end
+end
+
+Base.getindex(values::ElementLevelNodalValues, element::Int64) = values.values[element, :, :]
+Base.iterate(values::ElementLevelNodalValues, element=1) = element > size(values, 1) ? nothing : (values.values[element, :, :], element + 1)
+Base.length(values::ElementLevelNodalValues) = size(values.values, 1)
+Base.size(values::ElementLevelNodalValues) = size(values.values)
+Base.size(values::ElementLevelNodalValues, dim::Int64) = dim > 3 ? error("ElementLevelNodalValues value array is 3D") : size(values.values, dim)
 
 
 """
