@@ -4,6 +4,7 @@ authors = ["cmhamel <cmhamel32@gmail.com>"]
 version = "0.1.0"
 
 [deps]
+Compat = "34da2185-b29b-5c13-b0c7-acf172513d20"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 Exodus = "f57ae99e-f805-4780-bdca-96e224be1e5a"
 IterativeSolvers = "42fd0dbc-a981-5370-80f2-aaf504508153"
@@ -14,6 +15,7 @@ Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
