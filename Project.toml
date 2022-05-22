@@ -4,6 +4,7 @@ authors = ["cmhamel <cmhamel32@gmail.com>"]
 version = "0.1.0"
 
 [deps]
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 Compat = "34da2185-b29b-5c13-b0c7-acf172513d20"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 Exodus = "f57ae99e-f805-4780-bdca-96e224be1e5a"
