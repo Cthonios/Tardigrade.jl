@@ -5,6 +5,8 @@ module Sections
 
 export CellSection
 export CellSections
+export Section
+# export Sections
 export volume
 
 using Exodus
@@ -21,6 +23,7 @@ import ..ShapeFunctions: ShapeFunctionValuesAndGradients
 `Section`
 """
 abstract type Section <: FEMContainer end
+# Sections = Vector{Section}
 
 # maybe generalize this a bit to include the different shape functions containers we made.
 
@@ -61,7 +64,7 @@ volume(c::CellSection) = sum(c.JxW)
 """
 `CellSections`
 """
-mutable struct CellSections
+mutable struct CellSections <: FEMContainer
     sections::Vector{CellSection}
     function CellSections(sections_settings::Vector{Dict{Any,Any}}, mesh::Mesh)
         return new(initialize_cell_sections(sections_settings, mesh))
@@ -71,7 +74,7 @@ end
 Base.getindex(c::CellSections, s::Int64) = c.sections[s]
 Base.iterate(c::CellSections, s=1) = s > length(c.sections) ? nothing : (c.sections[s], s + 1)
 Base.length(c::CellSections) = length(c.sections)
-volume(c::CellSections) = volume.(c) |> sum
+volume(c::CellSections) = volume.(c) |> sum # the beauty of Julia right here
 
 # CellSections = Vector{CellSection}
 
