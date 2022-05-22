@@ -15,6 +15,11 @@ Modules = [Meshes]
 Modules = [Quadratures]
 ```
 
+## Sections
+```@autodocs
+Modules = [Sections]
+```
+
 ## ShapeFunctions
 ```@autodocs
 Modules = [ShapeFunctions]

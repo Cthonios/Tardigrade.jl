@@ -119,11 +119,16 @@ Interface\n
 `Base.size(values::ElementLevelNodalValues)`\n
 `Base.size(values::ElementLevelNodalValues, dim::Int64)`\n
 """
-struct ElementLevelNodalValues <: AbstractElementLevelNodalValues
-    values::Array{Float64,3}
+struct ElementLevelNodalValues{T} <: AbstractElementLevelNodalValues
+    values::Array{Float64,T}
     function ElementLevelNodalValues(coords::Coordinates, conns::Connectivity)
         values = coords[conns]
-        return new(values)
+        return new{3}(values)
+    end
+    function ElementLevelNodalValues(values::Vector{Float64}, conns::Connectivity)
+        new_values = values[conns.connectivity]
+        @show size(new_values)
+        return new{2}(new_values)
     end
     # function ElementLevelNodalValues(values::Matrix{Float64}, conns::Connectivity)
     #     new_values = values[conns.connectivity, :]
@@ -143,7 +148,7 @@ struct ElementLevelNodalValuesStatic{N,D} <: AbstractElementLevelNodalValues
             # @show coords.coordinates[conn]
             # @show coords[conn]
             @show length(coords)
-            # @show size(coords[[1 2]])
+            # @show size(coords[[1 2]])``
             @show N
             @show D
             @show size(coords[conn])
@@ -158,11 +163,13 @@ struct ElementLevelNodalValuesStatic{N,D} <: AbstractElementLevelNodalValues
     # end
 end
 
-Base.getindex(values::AbstractElementLevelNodalValues, element::Int64) = values.values[element, :, :]
-Base.iterate(values::AbstractElementLevelNodalValues, element=1) = element > size(values, 1) ? nothing : (values.values[element, :, :], element + 1)
-Base.length(values::AbstractElementLevelNodalValues) = size(values.values, 1)
-Base.size(values::AbstractElementLevelNodalValues) = size(values.values)
-Base.size(values::AbstractElementLevelNodalValues, dim::Int64) = dim > 3 ? error("ElementLevelNodalValues value array is 3D") : size(values.values, dim)
+Base.getindex(values::ElementLevelNodalValues{2}, element::Int64) = values.values[element, :]
+Base.getindex(values::ElementLevelNodalValues{3}, element::Int64) = values.values[element, :, :]
+Base.iterate(values::ElementLevelNodalValues{2}, element=1) = element > size(values, 1) ? nothing : (values.values[element, :], element + 1)
+Base.iterate(values::ElementLevelNodalValues{3}, element=1) = element > size(values, 1) ? nothing : (values.values[element, :, :], element + 1)
+Base.length(values::ElementLevelNodalValues) = size(values.values, 1)
+Base.size(values::ElementLevelNodalValues) = size(values.values)
+Base.size(values::ElementLevelNodalValues, dim::Int64) = dim > 3 ? error("ElementLevelNodalValues value array is 2D or 3D") : size(values.values, dim)
 
 
 """
@@ -178,6 +185,7 @@ struct Mesh <: FEMContainer
         if lowercase(mesh_settings["type"]) == "exodus"
             coords, blocks, node_sets = read_exodus_mesh(mesh_settings)
             coords = Coordinates(coords) # convert to the Tardigrade container
+            # TODO: specify static vs. non-static coordinates
             return new(coords, blocks, node_sets)
         else
             @show mesh_settings

@@ -4,16 +4,26 @@ test_set_name = rpad("Sections.jl", 64)
     mesh = Meshes.Mesh(settings["mesh"])
     sections = settings["sections"]
 
-    @show mesh.blocks
-    @show mesh.blocks[1].block_id
+    @time cell_section = CellSection(sections[1], mesh)
+    @time cell_section = CellSection(sections[1], mesh)
 
-    cell_sections = initialize_cell_sections(sections, mesh)
-    # for section in sections
-    #     @show section
+    u = zeros(Float64, length(mesh.coordinates))
+    @time u_element_level = ElementLevelNodalValues(u, cell_section.connectivity)
+    @time u_element_level = ElementLevelNodalValues(u, cell_section.connectivity)
 
-    #     # blocks = findall(x -> x.block_id == section["block"], mesh.blocks)
-    #     # if length(blocks) > 1
-    #     #     error("only one block per section is currently supported. To be addressed.")
-    #     # end
-    # end
+    cell_section.u = u_element_level
+
+    @time vol = volume(cell_section)
+    @time vol = volume(cell_section)
+
+    @test vol == 1.0
+
+    # now testing some CellSections containers
+
+    cell_sections = CellSections(sections, mesh)
+
+    @time vol = volume(cell_sections)
+    @time vol = volume(cell_sections)
+
+    @test vol == 1.0
 end

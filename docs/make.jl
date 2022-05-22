@@ -4,6 +4,7 @@ using Tardigrade
 using Tardigrade.Meshes
 using Tardigrade.Parser
 using Tardigrade.Quadratures
+using Tardigrade.Sections
 using Tardigrade.ShapeFunctions
 
 makedocs(sitename="Tardigrade.jl",
