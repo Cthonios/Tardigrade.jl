@@ -7,6 +7,7 @@ test_set_name = rpad("Assembly.jl - DenseStaticAssembly", 64)
     assembly = DenseStaticAssembly(mesh, sections)
 
     zero!(assembly)
+    assemble!(assembly, sections[1])
 
     @show size(assembly.K)
     @show size(assembly.F)

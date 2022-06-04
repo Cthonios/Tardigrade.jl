@@ -8,8 +8,10 @@ module Assembly
 
 export DenseStaticAssembly
 export zero!
+export assemble!
 
 import ..Meshes: Mesh
+import ..Sections: CellSection
 import ..Sections: CellSections
 
 abstract type AbstractAssembly end
@@ -29,9 +31,15 @@ mutable struct DenseStaticAssembly <: StaticAssembly
     end
 end
 
-function assemble(d::DenseStaticAssembly)
-    
+function assemble!(d::DenseStaticAssembly, s::CellSection)
+    for e in s
+        # @show e
+    end
 end
+
+# function assemble(d::DenseStaticAssembly, c::CellSections)
+
+# end
 
 # zero(d::DenseStaticAssembly)
 function zero!(d::DenseStaticAssembly)

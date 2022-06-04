@@ -6,5 +6,6 @@ include("Quadratures.jl")
 include("ShapeFunctions.jl")
 include("Sections.jl")
 include("Assembly.jl")
+include("Kernels.jl")
 
 end # module

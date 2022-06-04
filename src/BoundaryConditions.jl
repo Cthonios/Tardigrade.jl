@@ -7,23 +7,29 @@ export ZeroDirichletBoundaryCondition
 
 using Exodus
 
-bcs_map = Dict("zero"     => "ZeroDirichletBoundaryCondition",
-               "one"      => "OneDirichletBoundaryCondition",
-               "constant" => "ConstantDirichletBoundaryCondition") # etc
+bcs_map = Dict("zero"     => "ZeroDirichletBC",
+               "one"      => "OneDirichletBC",
+               "constant" => "ConstantDirichletBC") # etc
 
-abstract type AbstractBoundaryCondition end
-abstract type DirichletBoundaryCondition end
+abstract type AbstractBC end
+abstract type DirichletBC end
 
-struct ZeroDirichletBoundaryCondition <: DirichletBoundaryCondition
+struct ZeroDirichletBC <: DirichletBC
     nodes::Vector{Int64}
     function ZeroDirichletBoundaryCondition(node_set::Exodus.NodeSet)
         return new(node_set.nodes)
     end
 end
 
-function update_residual!(bc::ZeroDirichletBoundaryCondition, a::AbstractAssembly)
+function update_residual!(bc::ZeroDirichletBC)
 
 end
+
+function update_tangent!(bc::DirichletBC)
+
+end
+
+
 
 # function update_rhs()
 

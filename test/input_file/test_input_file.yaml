@@ -1,6 +1,6 @@
 mesh:
   type: exodus
-  file name: './mesh/mesh_test_0.0078125.g'
+  file name: './mesh/mesh_test_0.125.g'
 
 sections:
   - block: 1
@@ -16,7 +16,8 @@ boundary conditions:
   - type: zero
     node set: 4
 
-
+kernels:
+  - type: poisson
 
 
 

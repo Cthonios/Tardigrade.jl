@@ -49,15 +49,18 @@ mutable struct CellSection <: Section
         coordinates = ElementLevelNodalValues(mesh.coordinates, connectivity)
         shape_functions = ShapeFunctionValuesAndGradients(mesh.blocks[block_id].elem_type,
                                                           quadrature, coordinates)
-
+        # for now initialize to zero
+        temp_u = zeros(Float64, size(mesh.coordinates, 1))
+        temp_u = ElementLevelNodalValues(temp_u, connectivity)
         # don't create temps, it will eat up memory, I think?
         return new(coordinates, connectivity,
-                   shape_functions.φ, shape_functions.∇φ_X, shape_functions.JxW)
+                   shape_functions.φ, shape_functions.∇φ_X, shape_functions.JxW,
+                   temp_u)
     end
 end
 
 Base.getindex(c::CellSection, e::Int64) = (c.coordinates[e], c.connectivity[e], c.φ, c.∇φ_X[e, :, :, :], c.JxW[e, :], c.u[e])
-# Base.iterate(c::CellSection, e=1) = e
+Base.iterate(c::CellSection, e=1) = e > length(c.connectivity) ? nothing : (getindex(c, e), e + 1)
 Base.length(c::CellSection) = length(c.connectivity)
 volume(c::CellSection) = sum(c.JxW)
 
