@@ -41,6 +41,7 @@ mutable struct Cell <: AbstractCell
     ∇φ_X::Array{Float64,3}
     JxW::Vector{Float64}
     u::Vector{Float64}
+    # ∇u::Matrix{Float64}
 end
 volume(c::Cell) = sum(c.JxW)
 
