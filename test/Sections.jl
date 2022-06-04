@@ -26,4 +26,22 @@ test_set_name = rpad("Sections.jl", 64)
     @time vol = volume(cell_sections)
 
     @test vol == 1.0
+
+    # testing new cellsection implmentation
+    @time cell_section = CellSection2(sections[1], mesh)
+    @time cell_section = CellSection2(sections[1], mesh)
+
+    @time vol = volume(cell_section)
+    @time vol = volume(cell_section)
+
+    @test vol == 1.0
+
+    # now testing some CellSections2 containers
+
+    cell_sections = CellSections2(sections, mesh)
+
+    @time vol = volume(cell_sections)
+    @time vol = volume(cell_sections)
+
+    @test vol == 1.0
 end

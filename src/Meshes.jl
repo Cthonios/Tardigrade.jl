@@ -127,7 +127,6 @@ struct ElementLevelNodalValues{T} <: AbstractElementLevelNodalValues
     end
     function ElementLevelNodalValues(values::Vector{Float64}, conns::Connectivity)
         new_values = values[conns.connectivity]
-        @show size(new_values)
         return new{2}(new_values)
     end
     # function ElementLevelNodalValues(conns::Connectivity)
