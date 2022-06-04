@@ -20,3 +20,6 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
+
+[compat]
+julia = "1.7.2"
