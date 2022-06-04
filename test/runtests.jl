@@ -1,4 +1,4 @@
-using BenchmarkTools
+# using BenchmarkTools
 using Test
 
 using Tardigrade.Assembly
