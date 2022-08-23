@@ -1,0 +1,23 @@
+mesh:
+  type: exodus
+  file name: './mesh/mesh_test_0.125.g'
+
+sections:
+  - block: 1
+    quadrature order: 2
+
+boundary conditions:
+  - type: zero
+    node set: 1
+  - type: zero
+    node set: 2
+  - type: zero
+    node set: 3
+  - type: zero
+    node set: 4
+
+kernels:
+  - type: poisson
+
+
+

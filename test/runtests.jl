@@ -1,21 +1,12 @@
-# using BenchmarkTools
-using Test
+using Tardigrade
 
-using Tardigrade.Assembly
-using Tardigrade.Kernels
-using Tardigrade.Meshes
-using Tardigrade.Parser
-using Tardigrade.Quadratures
-using Tardigrade.Sections
-using Tardigrade.ShapeFunctions
+# @time mesh = Meshes.SingleBlockExodusMesh("./mesh/mesh_test_0.0078125.g")
+# @time mesh = Meshes.SingleBlockExodusMesh("./mesh/mesh_test_0.0078125.g")
 
+@time mesh = Meshes.SingleBlockExodusMesh("./mesh/mesh_test_0.25.g")
+@time mesh = Meshes.SingleBlockExodusMesh("./mesh/mesh_test_0.25.g")
 
-# TODO figure out which modules make sense to make a standalone test input_file
-# so this isn't massive
-include("Assembly.jl")
-include("Kernels.jl")
-include("Meshes.jl")
-include("Parser.jl")
-include("Quadratures.jl")
-include("Sections.jl")
-include("ShapeFunctions.jl")
+@time element_coords = Meshes.element_level_coordinates(mesh)
+@time element_coords = Meshes.element_level_coordinates(mesh)
+
+@show element_coords
