@@ -1,3 +1,6 @@
+[![CI](https://github.com/cmhamel/Tardigrade.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/cmhamel/Tardigrade.jl/actions/workflows/ci.yml)
+[![codecov.io](http://codecov.io/github/cmhamel/Tardigrade.jl/coverage.svg?branch=master)](http://codecov.io/github/cmhamel/Tardigrade.jl?branch=master)
+
 # Tardigrade.jl
 
 The main purpose of Tardigrade.jl is to provide an educational and free to use for both a library and production finite element level tools.
@@ -12,4 +15,4 @@ Currently the only supported mesh type is the exodusII format through Exodus.jl 
 a pull request.
 
 Some of the structure of the library is heavily inspired by the MOOSE finite elmenet program from Idaho National Laboratories, but our goal is to 
-have a completely Julian (except for maybe some artifacts) implimentation of highly coupled finite elements.
+have a completely Julian (except for maybe some artifacts) implementation of highly coupled finite elements.
