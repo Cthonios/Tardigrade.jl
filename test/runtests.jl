@@ -1,12 +1,15 @@
 using Tardigrade
+using Test
 
-# @time mesh = Meshes.SingleBlockExodusMesh("./mesh/mesh_test_0.0078125.g")
-# @time mesh = Meshes.SingleBlockExodusMesh("./mesh/mesh_test_0.0078125.g")
+macro tardigrade_test_set(test_name::String, ex)
+    return quote
+        local test_set_name = rpad($test_name, 64)
+        @testset "$test_set_name" begin
+            local val = $ex
+            val
+        end
+    end
+end
 
-@time mesh = Meshes.SingleBlockExodusMesh("./mesh/mesh_test_0.25.g")
-@time mesh = Meshes.SingleBlockExodusMesh("./mesh/mesh_test_0.25.g")
-
-@time element_coords = Meshes.element_level_coordinates(mesh)
-@time element_coords = Meshes.element_level_coordinates(mesh)
-
-@show element_coords
+include("TestMeshes.jl")
+include("TestQuadratures.jl")
