@@ -16,3 +16,5 @@ a pull request.
 
 Some of the structure of the library is heavily inspired by the MOOSE finite elmenet program from Idaho National Laboratories, but our goal is to 
 have a completely Julian (except for maybe some artifacts) implementation of highly coupled finite elements.
+
+This is still very much a work in progress...
