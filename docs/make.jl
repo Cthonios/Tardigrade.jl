@@ -22,7 +22,6 @@ pages = [
 makedocs(sitename="Tardigrade.jl",
          format=Documenter.HTML(),
          modules=[Tardigrade],
-         pages=pages,
-         repo="github.com/cmhamel/Tardigrade.jl.git")
+         pages=pages)
 
 deploydocs(repo="github.com/cmhamel/Tardigrade.jl.git")
