@@ -1,3 +1,7 @@
+"""
+    ShapeFunctions
+A module for working with FEM shape functions.
+"""
 module ShapeFunctions
 
 export AbstractShapeFunction
@@ -20,7 +24,9 @@ Container for shape function methods on the master element.
 """
 struct LagrangeShapeFunction <: AbstractShapeFunction
     φ::Function
-    ∇φ::Function
+    φ!::Function
+    ∇φ_ξ::Function
+    ∇φ_ξ!::Function
 end
 
 """
@@ -30,9 +36,13 @@ Init method for LagrangeShapeFunction.
 function LagrangeShapeFunction(element_type::String)
     values_method_name = Symbol(lowercase(element_type) * "_shape_function_values")
     grads_method_name = Symbol(lowercase(element_type) * "_shape_function_gradients")
+    values_method_name! = Symbol(lowercase(element_type) * "_shape_function_values!")
+    grads_method_name! = Symbol(lowercase(element_type) * "_shape_function_gradients!")
     values_method = getfield(ShapeFunctions, values_method_name)
     grads_method = getfield(ShapeFunctions, grads_method_name)
-    return LagrangeShapeFunction(values_method, grads_method)
+    values_method! = getfield(ShapeFunctions, values_method_name!)
+    grads_method! = getfield(ShapeFunctions, grads_method_name!)
+    return LagrangeShapeFunction(values_method, values_method!, grads_method, grads_method!)
 end
 
 # NEED TO FIGURE OUT TYPE FOR X WITH A VIEW
@@ -71,7 +81,18 @@ function quad4_shape_function_values(ξ::Vector{T}) where {T <: Real}
 end
 
 """
-    quad4_shape_function_gradients
+    quad4_shape_function_values!(φ::Vector{T}, ξ::Vector{T}) where {T <: Real}
+Implementation for quad4 element with pre-allocation.
+"""
+function quad4_shape_function_values!(φ::Vector{T}, ξ::Vector{T}) where {T <: Real}
+    φ[1] = 0.25 * (1.0 - ξ[1]) * (1.0 - ξ[2])
+    φ[2] = 0.25 * (1.0 + ξ[1]) * (1.0 - ξ[2])
+    φ[3] = 0.25 * (1.0 + ξ[1]) * (1.0 + ξ[2])
+    φ[4] = 0.25 * (1.0 - ξ[1]) * (1.0 + ξ[2])
+end
+
+"""
+    quad4_shape_function_gradients(ξ::Vector{T}) where {T <: Real}
 Implementation for quad4 element.
 """
 function quad4_shape_function_gradients(ξ::Vector{T}) where {T <: Real}
@@ -88,6 +109,24 @@ function quad4_shape_function_gradients(ξ::Vector{T}) where {T <: Real}
     ∇φ_ξ[4, 1] = -0.25 * (1.0 + ξ[2])
     ∇φ_ξ[4, 2] =  0.25 * (1.0 - ξ[1])
     return ∇φ_ξ
+end
+
+"""
+    quad4_shape_function_gradients!
+Implementation for quad4 element.
+"""
+function quad4_shape_function_gradients!(∇φ_ξ::Matrix{T}, ξ::Vector{T}) where {T <: Real}
+    ∇φ_ξ[1, 1] = -0.25 * (1.0 - ξ[2])
+    ∇φ_ξ[1, 2] = -0.25 * (1.0 - ξ[1])
+    #
+    ∇φ_ξ[2, 1] =  0.25 * (1.0 - ξ[2])
+    ∇φ_ξ[2, 2] = -0.25 * (1.0 + ξ[1])
+    #
+    ∇φ_ξ[3, 1] = 0.25 * (1.0 + ξ[2])
+    ∇φ_ξ[3, 2] = 0.25 * (1.0 + ξ[1])
+    #
+    ∇φ_ξ[4, 1] = -0.25 * (1.0 + ξ[2])
+    ∇φ_ξ[4, 2] =  0.25 * (1.0 - ξ[1])
 end
 
 end # module

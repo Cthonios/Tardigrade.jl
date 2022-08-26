@@ -8,8 +8,10 @@ pages = [
     "Home"              => "index.md",
     "Table of Contents" => "toc.md",
     "Tardigrade"        => "Tardigrade.md",
+    "Fields"            => "Fields.md",
     "Meshes"            => "Meshes.md",
-    "Quadratures"       => "Quadratures.md"
+    "Quadratures"       => "Quadratures.md",
+    "ShapeFunctions"    => "ShapeFunctions.md"
 ]
 
 makedocs(
