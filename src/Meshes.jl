@@ -31,7 +31,7 @@ struct SingleBlockExodusMesh{I, F} <: AbstractExodusMesh
 end
 
 """
-    SingleBlockExodusMesh
+    SingleBlockExodusMesh(file_name::String)
 Exodus mesh that only has a single block.
 # Arguments
 - `file_name::String`: string of absolute path of mesh file name.
@@ -65,7 +65,7 @@ end
 
 
 """
-    element_level_connectivity
+    element_level_connectivity(mesh::SingleBlockExodusMesh, e::T) where {T <: Integer}
 # Arguments
 - `mesh::SingleBlockExodusMesh`: exodus mesh object
 - `e::T`: element id, can be either Int32 or Int64
@@ -75,13 +75,13 @@ element_level_connectivity(mesh::SingleBlockExodusMesh, e::T) where {T <: Intege
 # need this to have block be a different Matrix
 
 """
-    element_level_coordinates
+    element_level_coordinates(mesh::SingleBlockExodusMesh)
 # Arguments
 - `mesh::SingleBlockExodusMesh`: exodus mesh object
 """
 element_level_coordinates(mesh::SingleBlockExodusMesh) = @view mesh.nodal_coordinates[mesh.connectivity, :]
 """
-    element_level_coordinates
+    element_level_coordinates(mesh::SingleBlockExodusMesh, e::T) where {T <: Integer}
 # Arguments
 - `mesh::SingleBlockExodusMesh`: exodus mesh object
 - `e::T`: element id, can be either Int32 or Int64

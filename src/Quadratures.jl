@@ -26,7 +26,7 @@ struct Quadrature
 end
 
 """
-    Quadrature
+    Quadrature(element_type::String, q_order::Int64)
 Init method for Quadrature
 # Arguments
 - `element_type::String`: The type of element in string format
@@ -38,8 +38,25 @@ function Quadrature(element_type::String, q_order::Int64)
     return Quadrature(ξ, w)
 end
 
+"""
+    Base.getindex(q::Quadrature, index::Int64)
+# Arguments
+- `q::Quadrature`: Quadrature object
+- `index::Int64`: Quadrature point index
+"""
 Base.getindex(q::Quadrature, index::Int64) = (q.ξ[index, :], q.w[index])
+"""
+    Base.iterate(q::Quadrature, q_point=1)
+# Arguments
+- `q::Quadrature`: Quadrature object
+- `index::Int64`: Quadrature point index
+"""
 Base.iterate(q::Quadrature, q_point=1) = q_point > size(q.w, 1) ? nothing : ((q.ξ[q_point, :], q.w[q_point]), q_point + 1)
+"""
+    Base.length(q::Quadrature)
+Returns the number of quadrature points.
+- `q::Quadrature`: Quadrature object
+"""
 Base.length(q::Quadrature) = size(q.w, 1)
 
 """
