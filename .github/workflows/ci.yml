@@ -75,7 +75,7 @@ jobs:
             using Pkg
             Pkg.activate(".")
             Pkg.add("Documenter")
-            include("doc/make.jl")
+            include("docs/make.jl")
           '
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
