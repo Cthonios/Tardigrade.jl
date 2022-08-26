@@ -21,10 +21,12 @@ Interface\n
 `Base.getindex(q::Quadrature, index::Int64)`\n
 `Base.iterate(q::Quadrature, q_point=1)`\n
 `Base.length(q::Quadrature)`\n
+
+TODO make parametric for Flote32/64
 """
 struct Quadrature
-    xi::Matrix{Float64}
-    w::Vector{Float64}
+    xi::Matrix
+    w::Vector
     function Quadrature(element_type::String, q_order::Int64)
         method_symbol = Symbol(lowercase(element_type) * "_quadrature_points_and_weights")
         xi, w = getfield(Quadratures, method_symbol)(q_order)

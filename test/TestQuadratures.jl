@@ -1,6 +1,8 @@
+using Tardigrade.Quadratures
+
 @tardigrade_test_set "Quadratures.jl - Quadrature" begin
-    @time quadrature_rule = Quadratures.Quadrature("quad4", 1)
-    @time quadrature_rule = Quadratures.Quadrature("quad4", 1)
+    @time quadrature_rule = Quadrature("quad4", 1)
+    @time quadrature_rule = Quadrature("quad4", 1)
 
     # correctness test, stupid but a sanity check
     @test quadrature_rule.xi[1, 1] == 0.0
@@ -15,10 +17,11 @@
     end
 
     @test length(quadrature_rule) == 1
+    @test sum(quadrature_rule.w) == 4.
 
     # correctness test, stupid but a sanity check
-    @time quadrature_rule = Quadratures.Quadrature("quad4", 2)
-    @time quadrature_rule = Quadratures.Quadrature("quad4", 2)
+    @time quadrature_rule = Quadrature("quad4", 2)
+    @time quadrature_rule = Quadrature("quad4", 2)
 
     @test quadrature_rule.xi[1, 1] == -1.0 / sqrt(3.0)
     @test quadrature_rule.xi[1, 2] == -1.0 / sqrt(3.0)
@@ -39,4 +42,5 @@
     end
 
     @test length(quadrature_rule) == 4
+    @test sum(quadrature_rule.w) == 4.
 end

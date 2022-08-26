@@ -4,6 +4,9 @@ export AbstractMesh
 export ExodusMesh
 export SingleBlockExodusMesh
 
+export element_level_connectivity
+export element_level_coordinates
+
 using Exodus
 
 # building type hierarchy of meshes so if someone
@@ -26,7 +29,7 @@ struct SingleBlockExodusMesh{I, F} <: AbstractMesh
         block = Exodus.read_blocks(exo, Exodus.read_block_ids(exo, init))[1]
         conn = convert_connectivity(block)
         node_sets = Exodus.read_node_sets(exo, Exodus.read_node_set_ids(exo, init))
-
+        close(exo)
         return new{Int32, Float64}(nodal_coordinates, conn, node_sets) # TODO dispatch this better
     end
 end
@@ -43,9 +46,11 @@ function convert_connectivity(block::Exodus.Block{I, I}) where {I <: Exodus.ExoI
     return conn_out
 end
 
-# need this to have block be a different Matrix
-element_level_coordinates(exo::SingleBlockExodusMesh) = @view exo.nodal_coordinates[exo.connectivity, :]
 
-# function element_level_coordinates
+element_level_connectivity(mesh::SingleBlockExodusMesh, e::T) where {T <: Integer} = @view mesh.connectivity[e, :]
+
+# need this to have block be a different Matrix
+element_level_coordinates(mesh::SingleBlockExodusMesh) = @view mesh.nodal_coordinates[mesh.connectivity, :]
+element_level_coordinates(mesh::SingleBlockExodusMesh, e::T) where {T <: Integer} = @view mesh.nodal_coordinates[element_level_connectivity(mesh, e), :]
 
 end # module
