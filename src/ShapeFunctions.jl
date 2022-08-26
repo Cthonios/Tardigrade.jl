@@ -1,7 +1,5 @@
 module ShapeFunctions
 
-using Quadratures
-
 export AbstractShapeFunction
 export LagrangeShapeFunction
 export J
@@ -21,7 +19,7 @@ function LagrangeShapeFunction(element_type::String)
     
     values_method = getfield(ShapeFunctions, values_method_name)
     grads_method = getfield(ShapeFunctions, grads_method_name)
-    return values_method, grads_method
+    return LagrangeShapeFunction(values_method, grads_method)
 end
 
 J(∇φ_ξ::Matrix{T}, X::Matrix{T}) where {T <: Real} = transpose(∇φ_ξ) * X
