@@ -19,7 +19,7 @@ pages = [
 makedocs(
     sitename = "Tardigrade.jl",
     format   = Documenter.HTML(
-        canonical = "https://cmhamel.github.io/Tardigrade.jl"
+        canonical = "https://cmhamel.github.io"
     ),
     modules  = [Tardigrade],
     pages    = pages,
