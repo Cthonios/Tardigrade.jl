@@ -70,12 +70,17 @@ jobs:
       - uses: julia-actions/setup-julia@v1
         # with:
         #   version: '1.7'
+      - run: |
+          julia --color=yes -e '
+            using Pkg
+            Pkg.add("Documenter")
+          '
       # - run: |
       #     julia --project=docs -e '
       #       using Pkg
       #       Pkg.develop(PackageSpec(path=pwd()))
       #       Pkg.instantiate()'
-      - run: julia --project=docs docs/make.jl
+      - run: julia --color=yes docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
