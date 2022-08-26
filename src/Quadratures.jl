@@ -1,7 +1,6 @@
 """
-`Quadratures`
-
-A module for organizing quadrature integration rules
+    Quadratures
+A module for organizing quadrature integration rules.
 """
 module Quadratures
 
@@ -15,53 +14,66 @@ element_dims = Dict(
     "hex8"  => 3 # not functional right now just an example
 )
 """
-`Quadrature`
-
-Interface\n
-`Base.getindex(q::Quadrature, index::Int64)`\n
-`Base.iterate(q::Quadrature, q_point=1)`\n
-`Base.length(q::Quadrature)`\n
-
-TODO make parametric for Flote32/64
+    Quadrature
+Container for managing quadrature points and weights.
+# Arguments
+`ξ::Matrix{Float64}`: Quadrature points
+`w::Vector{Float64}`: Quadrature weights
 """
 struct Quadrature
-    xi::Matrix
-    w::Vector
+    "ξ"
+    ξ::Matrix{Float64}
+    "w"
+    w::Vector{Float64}
+    """
+        Quadrature
+    Init method for Quadrature
+    # Arguments
+    - `element_type::String`: The type of element in string format
+    - `q_order::Int64`: The order of the quadrature rule for element_type
+    """
     function Quadrature(element_type::String, q_order::Int64)
         method_symbol = Symbol(lowercase(element_type) * "_quadrature_points_and_weights")
-        xi, w = getfield(Quadratures, method_symbol)(q_order)
-        return new(xi, w)
+        ξ, w = getfield(Quadratures, method_symbol)(q_order)
+        return new(ξ, w)
     end
 end
 
-Base.getindex(q::Quadrature, index::Int64) = (q.xi[index, :], q.w[index])
-Base.iterate(q::Quadrature, q_point=1) = q_point > size(q.w, 1) ? nothing : ((q.xi[q_point, :], q.w[q_point]), q_point + 1)
+Base.getindex(q::Quadrature, index::Int64) = (q.ξ[index, :], q.w[index])
+Base.iterate(q::Quadrature, q_point=1) = q_point > size(q.w, 1) ? nothing : ((q.ξ[q_point, :], q.w[q_point]), q_point + 1)
 Base.length(q::Quadrature) = size(q.w, 1)
 
-function quadrautre_order_error(q_order)
+"""
+    quadrature_order_error(q_order::Int64)
+Pre-defined error for improrper quadrature order.
+# Arguments
+- `q_order::Int64`: quadrature order
+"""
+function quadrautre_order_error(q_order::Int64)
     @show q_order
     error("q_order = " * q_order * " not supported yet")
 end
 
 """
-`quad4_quadrature_points_and_weights(q_order::Int64)`
+    quad4_quadrature_points_and_weights(q_order::Int64)
+Defines quadrature rule for quad4 elements.
+# Arguments
+- `q_order::Int64`: quadrature order
 """
 function quad4_quadrature_points_and_weights(q_order::Int64)
     if q_order == 1
-        n_q_points = 1
-        xi = [0.0 0.0;]
+        ξ = [0.0 0.0;]
         w = [4.0]
     elseif q_order == 2
-        n_q_points = 4
-        xi = (1.0 / sqrt(3.0)) * [-1.0 -1.0
-                                  1.0 -1.0
-                                  1.0 1.0
-                                  -1.0 1.0]
+        ξ = (1.0 / sqrt(3.0)) * [-1.0 -1.0
+                                 1.0 -1.0
+                                 1.0 1.0
+                                 -1.0 1.0]
         w = [1.0, 1.0, 1.0, 1.0]
     else
         quadrautre_order_error(q_order)
     end
-    return xi, w
+    return ξ, w
 end
 
 end # module

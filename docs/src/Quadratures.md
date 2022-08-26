@@ -1,0 +1,4 @@
+# Quadratures
+```@autodocs
+Modules = [Quadratures,]
+```
