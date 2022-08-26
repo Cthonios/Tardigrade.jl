@@ -61,22 +61,3 @@ jobs:
           file: lcov.info
           fail_ci_if_error: false
           verbose: true
-
-  docs:
-    name: Documentation
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: julia-actions/setup-julia@v1
-        # with:
-        #   version: '1.7'
-      - run: |
-          julia --color=yes -e '
-            using Pkg
-            Pkg.activate(".")
-            Pkg.add("Documenter")
-            include("docs/make.jl")
-          '
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
