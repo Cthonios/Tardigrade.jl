@@ -6,10 +6,10 @@ using Tardigrade.Quadratures
 
 pages = [
     "Home"                   => "index.md",
-    "Table of Contents"      => "toc.md",
-    "Tardigrade"             => "Tardigrade.md",
-    "Tardigrade.Meshes"      => "Meshes.md",
-    "Tardigrade.Quadratures" => "Quadratures.md"
+    # "Table of Contents"      => "toc.md",
+    # "Tardigrade"             => "Tardigrade.md",
+    # "Tardigrade.Meshes"      => "Meshes.md",
+    # "Tardigrade.Quadratures" => "Quadratures.md"
 ]
 
 # makedocs(sitename="Tardigrade.jl",
