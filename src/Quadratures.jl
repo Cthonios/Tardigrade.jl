@@ -21,22 +21,21 @@ Container for managing quadrature points and weights.
 `w::Vector{Float64}`: Quadrature weights
 """
 struct Quadrature
-    "ξ"
     ξ::Matrix{Float64}
-    "w"
     w::Vector{Float64}
-    """
-        Quadrature
-    Init method for Quadrature
-    # Arguments
-    - `element_type::String`: The type of element in string format
-    - `q_order::Int64`: The order of the quadrature rule for element_type
-    """
-    function Quadrature(element_type::String, q_order::Int64)
-        method_symbol = Symbol(lowercase(element_type) * "_quadrature_points_and_weights")
-        ξ, w = getfield(Quadratures, method_symbol)(q_order)
-        return new(ξ, w)
-    end
+end
+
+"""
+    Quadrature
+Init method for Quadrature
+# Arguments
+- `element_type::String`: The type of element in string format
+- `q_order::Int64`: The order of the quadrature rule for element_type
+"""
+function Quadrature(element_type::String, q_order::Int64)
+    method_symbol = Symbol(lowercase(element_type) * "_quadrature_points_and_weights")
+    ξ, w = getfield(Quadratures, method_symbol)(q_order)
+    return Quadrature(ξ, w)
 end
 
 Base.getindex(q::Quadrature, index::Int64) = (q.ξ[index, :], q.w[index])
