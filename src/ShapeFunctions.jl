@@ -7,10 +7,19 @@ module ShapeFunctions
 export AbstractShapeFunction
 export LagrangeShapeFunction
 export J
+export J!
 export detJ
+export detJ!
 export map_∇φ_ξ
+export map_∇φ_ξ!
 
 using LinearAlgebra
+
+# actual element implementations
+import ..Elements: quad4_shape_function_values
+import ..Elements: quad4_shape_function_values!
+import ..Elements: quad4_shape_function_gradients
+import ..Elements: quad4_shape_function_gradients!
 
 """
     AbstractShapeFunction
@@ -51,82 +60,41 @@ end
 Mapping Jacobian. Written to except views of coordinates.
 """
 J(∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S} = transpose(∇φ_ξ) * X
+
+"""
+    J!(J::Matrix{T}, ∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S} 
+Inplace mapping Jacobian.
+"""
+function J!(J::Matrix{T}, ∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S} 
+    J .= transpose(∇φ_ξ) * X
+end
 """
     detJ(∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S}
-Determinant of mapping Jacobian. Written to except views of coordinates
+Determinant of mapping Jacobian. Written to except views of coordinates.
 """
 detJ(∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S} = det(J(∇φ_ξ, X))
+
+# # THIS IS PROBABLY OVERKILL
+# """
+#     detJ(J::T, ∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S}
+# In place derminant of mapping Jacobian.
+# """
+# function detJ!(detJ::T, ∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S}
+#     detJ .= det(J(∇φ_ξ, X))
+# end
 """
     map_∇φ_ξ(∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S}
 Method to map master element shape function grads to physical element.
     Written to except views.
 """
 map_∇φ_ξ(∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S} = transpose(inv(J(∇φ_ξ, X)) * transpose(∇φ_ξ)) 
-
-
-# actual element implementations below
-#
-#
 """
-    quad4_shape_function_values(ξ::Vector{T}) where {T <: Real}
-Implementation for quad4 element.
+    map_∇φ_ξ!(∇φ_X::Matrix{T}, ∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S}    
+In place version of map_∇φ_ξ
 """
-function quad4_shape_function_values(ξ::Vector{T}) where {T <: Real}
-    φ = zeros(T, 4)
-    φ[1] = 0.25 * (1.0 - ξ[1]) * (1.0 - ξ[2])
-    φ[2] = 0.25 * (1.0 + ξ[1]) * (1.0 - ξ[2])
-    φ[3] = 0.25 * (1.0 + ξ[1]) * (1.0 + ξ[2])
-    φ[4] = 0.25 * (1.0 - ξ[1]) * (1.0 + ξ[2])
-    return φ
-end
-
-"""
-    quad4_shape_function_values!(φ::Vector{T}, ξ::Vector{T}) where {T <: Real}
-Implementation for quad4 element with pre-allocation.
-"""
-function quad4_shape_function_values!(φ::Vector{T}, ξ::Vector{T}) where {T <: Real}
-    φ[1] = 0.25 * (1.0 - ξ[1]) * (1.0 - ξ[2])
-    φ[2] = 0.25 * (1.0 + ξ[1]) * (1.0 - ξ[2])
-    φ[3] = 0.25 * (1.0 + ξ[1]) * (1.0 + ξ[2])
-    φ[4] = 0.25 * (1.0 - ξ[1]) * (1.0 + ξ[2])
-end
-
-"""
-    quad4_shape_function_gradients(ξ::Vector{T}) where {T <: Real}
-Implementation for quad4 element.
-"""
-function quad4_shape_function_gradients(ξ::Vector{T}) where {T <: Real}
-    ∇φ_ξ = zeros(T, 4, 2)
-    ∇φ_ξ[1, 1] = -0.25 * (1.0 - ξ[2])
-    ∇φ_ξ[1, 2] = -0.25 * (1.0 - ξ[1])
-    #
-    ∇φ_ξ[2, 1] =  0.25 * (1.0 - ξ[2])
-    ∇φ_ξ[2, 2] = -0.25 * (1.0 + ξ[1])
-    #
-    ∇φ_ξ[3, 1] = 0.25 * (1.0 + ξ[2])
-    ∇φ_ξ[3, 2] = 0.25 * (1.0 + ξ[1])
-    #
-    ∇φ_ξ[4, 1] = -0.25 * (1.0 + ξ[2])
-    ∇φ_ξ[4, 2] =  0.25 * (1.0 - ξ[1])
-    return ∇φ_ξ
-end
-
-"""
-    quad4_shape_function_gradients!
-Implementation for quad4 element.
-"""
-function quad4_shape_function_gradients!(∇φ_ξ::Matrix{T}, ξ::Vector{T}) where {T <: Real}
-    ∇φ_ξ[1, 1] = -0.25 * (1.0 - ξ[2])
-    ∇φ_ξ[1, 2] = -0.25 * (1.0 - ξ[1])
-    #
-    ∇φ_ξ[2, 1] =  0.25 * (1.0 - ξ[2])
-    ∇φ_ξ[2, 2] = -0.25 * (1.0 + ξ[1])
-    #
-    ∇φ_ξ[3, 1] = 0.25 * (1.0 + ξ[2])
-    ∇φ_ξ[3, 2] = 0.25 * (1.0 + ξ[1])
-    #
-    ∇φ_ξ[4, 1] = -0.25 * (1.0 + ξ[2])
-    ∇φ_ξ[4, 2] =  0.25 * (1.0 - ξ[1])
+function map_∇φ_ξ!(∇φ_X::Matrix{T}, ∇φ_ξ::Matrix{T}, X::S) where {T <: Real, S}
+    J!(∇φ_X, ∇φ_ξ, X) # use the already allocated memory twice
+    ∇φ_X .= transpose(inv(∇φ_X)) * transpose(∇φ_ξ)
 end
 
 end # module

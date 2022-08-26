@@ -7,6 +7,7 @@ The main inspiration for Tardigrade.jl came from the INL FEM code Moose. Moose i
 ```@contents
 Pages = [
     "Tardigrade.md",
+    "Elements.md",
     "Fields.md",
     "Meshes.md",
     "Quadratures.md",

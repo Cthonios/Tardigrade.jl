@@ -8,6 +8,7 @@ pages = [
     "Home"              => "index.md",
     "Table of Contents" => "toc.md",
     "Tardigrade"        => "Tardigrade.md",
+    "Elements"          => "Elements.md"
     "Fields"            => "Fields.md",
     "Meshes"            => "Meshes.md",
     "Quadratures"       => "Quadratures.md",

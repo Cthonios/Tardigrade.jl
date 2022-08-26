@@ -8,6 +8,9 @@ export Quadrature
 
 using Base
 
+# actual element implementations
+import ..Elements: quad4_quadrature_points_and_weights
+
 # need to set up a map between element type and quadrature array shape
 element_dims = Dict(
     "quad4" => 2, # add more orders when supported
@@ -68,28 +71,6 @@ Pre-defined error for improrper quadrature order.
 function quadrautre_order_error(q_order::Int64)
     @show q_order
     error("q_order = " * q_order * " not supported yet")
-end
-
-"""
-    quad4_quadrature_points_and_weights(q_order::Int64)
-Defines quadrature rule for quad4 elements.
-# Arguments
-- `q_order::Int64`: quadrature order
-"""
-function quad4_quadrature_points_and_weights(q_order::Int64)
-    if q_order == 1
-        ξ = [0.0 0.0;]
-        w = [4.0]
-    elseif q_order == 2
-        ξ = (1.0 / sqrt(3.0)) * [-1.0 -1.0
-                                 1.0 -1.0
-                                 1.0 1.0
-                                 -1.0 1.0]
-        w = [1.0, 1.0, 1.0, 1.0]
-    else
-        quadrautre_order_error(q_order)
-    end
-    return ξ, w
 end
 
 end # module

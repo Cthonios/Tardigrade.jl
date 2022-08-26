@@ -1,5 +1,6 @@
 module Tardigrade
-#comment
+
+export Elements
 export Fields
 export Meshes
 export Quadratures
@@ -9,6 +10,7 @@ export ShapeFunctions
 include("Meshes.jl")
 
 # rest can be alphabetical hopefully
+include("./elements/Elements.jl")
 include("Fields.jl")
 include("Quadratures.jl")
 include("ShapeFunctions.jl")

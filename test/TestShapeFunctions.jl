@@ -210,6 +210,28 @@ end
     @test detJ_e ≈ 0.25
 end
 
+# @tardigrade_test_set "ShapeFunctions.jl - Quad4 Order 1 Mapping Inplace" begin
+#     mesh = SingleBlockExodusMesh("./mesh/mesh_test_1.g")
+#     X = element_level_coordinates(mesh, 1)
+#     shape_functions = LagrangeShapeFunction("quad4")
+#     quadrature = Quadrature("quad4", 1)
+    
+#     # allocate some memory
+#     φ = zeros(Float64, 4)
+#     ∇φ_ξ = zeros(Float64, 4, 2)
+#     J = zeros(Float64, 2, 2)
+#     # detJ = zero(Float64)
+#     ∇φ_X = zeros(Float64, 4, 2)
+
+
+#     shape_functions.φ!(φ, quadrature.ξ[1, :])
+#     shape_functions.∇φ_ξ!(∇φ_ξ, quadrature.ξ[1, :])
+#     J!(J, ∇φ_ξ, X)
+#     # detJ!(detJ, ∇φ_ξ, X)
+#     map_∇φ_ξ!(∇φ_X, ∇φ_ξ, X)
+
+# end
+
 @tardigrade_test_set "ShapeFunctions.jl - Quad4 Order 2 Mapping" begin
     mesh = SingleBlockExodusMesh("./mesh/mesh_test_1.g")
     X = element_level_coordinates(mesh, 1)
