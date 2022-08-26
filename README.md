@@ -1,6 +1,10 @@
 [![CI](https://github.com/cmhamel/Tardigrade.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/cmhamel/Tardigrade.jl/actions/workflows/ci.yml)
 [![codecov.io](http://codecov.io/github/cmhamel/Tardigrade.jl/coverage.svg?branch=master)](http://codecov.io/github/cmhamel/Tardigrade.jl?branch=master)
 
+| **Documentation** |
+|:------------ |
+| [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://cmhamel.github.io/Tardigrade.jl) |
+
 # Tardigrade.jl
 
 The main purpose of Tardigrade.jl is to provide an educational and free to use for both a library and production finite element level tools.
