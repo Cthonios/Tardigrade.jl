@@ -73,7 +73,7 @@ jobs:
       - run: |
           julia --color=yes -e '
             using Pkg
-            Pkg.activate('.')
+            Pkg.activate(".")
             Pkg.add("Documenter")
           '
       # - run: |
