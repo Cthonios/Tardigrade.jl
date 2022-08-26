@@ -5,11 +5,11 @@ using Tardigrade.Meshes
 using Tardigrade.Quadratures
 
 pages = [
-    "Home"                   => "index.md",
-    "Table of Contents"      => "toc.md",
-    "Tardigrade"             => "Tardigrade.md",
-    "Tardigrade.Meshes"      => "Meshes.md",
-    "Tardigrade.Quadratures" => "Quadratures.md"
+    "Home"              => "index.md",
+    "Table of Contents" => "toc.md",
+    "Tardigrade"        => "Tardigrade.md",
+    "Meshes"            => "Meshes.md",
+    "Quadratures"       => "Quadratures.md"
 ]
 
 makedocs(

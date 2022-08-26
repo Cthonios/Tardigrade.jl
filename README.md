@@ -1,9 +1,6 @@
 [![CI](https://github.com/cmhamel/Tardigrade.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/cmhamel/Tardigrade.jl/actions/workflows/ci.yml)
 [![codecov.io](http://codecov.io/github/cmhamel/Tardigrade.jl/coverage.svg?branch=master)](http://codecov.io/github/cmhamel/Tardigrade.jl?branch=master)
-
-| **Documentation** |
-|:------------ |
-| [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://cmhamel.github.io/Tardigrade.jl) |
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://cmhamel.github.io/Tardigrade.jl)
 
 # Tardigrade.jl
 
@@ -22,5 +19,3 @@ Some of the structure of the library is heavily inspired by the MOOSE finite elm
 have a completely Julian (except for maybe some artifacts) implementation of highly coupled finite elements.
 
 This is still very much a work in progress...
-
-WTF JEKYLL!!!
