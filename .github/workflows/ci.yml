@@ -75,13 +75,17 @@ jobs:
             using Pkg
             Pkg.activate(".")
             Pkg.add("Documenter")
+            include("doc/make.jl")
           '
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
       # - run: |
       #     julia --project=docs -e '
       #       using Pkg
       #       Pkg.develop(PackageSpec(path=pwd()))
       #       Pkg.instantiate()'
-      - run: julia --color=yes docs/make.jl
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
+      # - run: julia --color=yes docs/make.jl
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
