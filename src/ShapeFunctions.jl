@@ -1,53 +1,60 @@
-"""
-`ShapeFunctions`
-"""
 module ShapeFunctions
 
-using LinearAlgebra
+using Quadratures
 
-function setup_shape_function_methods(element_type::String)
+export AbstractShapeFunction
+export LagrangeShapeFunction
+export J
+export detJ
+export map_∇φ_ξ
+
+abstract type AbstractShapeFunction end
+
+struct LagrangeShapeFunction <: AbstractShapeFunction
+    φ::Function
+    ∇φ::Function
+end
+
+function LagrangeShapeFunction(element_type::String)
     values_method_name = Symbol(lowercase(element_type) * "_shape_function_values")
     grads_method_name = Symbol(lowercase(element_type) * "_shape_function_gradients")
     
     values_method = getfield(ShapeFunctions, values_method_name)
     grads_method = getfield(ShapeFunctions, grads_method_name)
-
     return values_method, grads_method
 end
 
+J(∇φ_ξ::Matrix{T}, X::Matrix{T}) where {T <: Real} = transpose(∇φ_ξ) * X
+# JxW(∇φ_ξ::Matrix{T})
+detJ(∇φ_ξ::Matrix{T}, X::Matrix{T}) where {T <: Real} = det(J(∇φ_ξ, X))
+map_∇φ_ξ(∇φ_ξ::Matrix{T}, X::Matrix{T}) where {T <: Real} = transpose(inv(J(∇φ_ξ, X)) * transpose(∇φ_ξ)) 
 
-J(∇φ_ξ::Matrix{Float64}, coords::Matrix{Float64}) = transpose(∇φ_ξ) * coords
-detJ(∇φ_ξ::Matrix{Float64}, coords::Matrix{Float64}) = det(J(∇φ_ξ, coords))
-map_∇φ_ξ(∇φ_ξ::Matrix{Float64}, coords::Matrix{Float64}) = transpose(inv(J(∇φ_ξ, coords)) * transpose(∇φ_ξ)) 
 
-# element types, eventually move to sorted files or something else organized
-
-function quad4_shape_function_values(quadrature::Quadrature)::Matrix{Float64}
-    φ = zeros(Float64, length(quadrature), 4)
-    for (q, (ξ, _)) in enumerate(quadrature)
-        φ[q, 1] = 0.25 * (1.0 - ξ[1]) * (1.0 - ξ[2])
-        φ[q, 2] = 0.25 * (1.0 + ξ[1]) * (1.0 - ξ[2])
-        φ[q, 3] = 0.25 * (1.0 + ξ[1]) * (1.0 + ξ[2])
-        φ[q, 4] = 0.25 * (1.0 - ξ[1]) * (1.0 + ξ[2])
-    end
+# actual element implementations below
+#
+#
+function quad4_shape_function_values(ξ::Vector{T}) where {T <: Real}
+    φ = zeros(T, 4)
+    φ[1] = 0.25 * (1.0 - ξ[1]) * (1.0 - ξ[2])
+    φ[2] = 0.25 * (1.0 + ξ[1]) * (1.0 - ξ[2])
+    φ[3] = 0.25 * (1.0 + ξ[1]) * (1.0 + ξ[2])
+    φ[4] = 0.25 * (1.0 - ξ[1]) * (1.0 + ξ[2])
     return φ
 end
 
-function quad4_shape_function_gradients(quadrature::Quadrature)::Array{Float64,3}
-    ∇φ_ξ = zeros(Float64, length(quadrature), 4, 2)
-    for (q, (ξ, _)) in enumerate(quadrature)
-        ∇φ_ξ[q, 1, 1] = -0.25 * (1.0 - ξ[2])
-        ∇φ_ξ[q, 1, 2] = -0.25 * (1.0 - ξ[1])
-        #
-        ∇φ_ξ[q, 2, 1] = 0.25 * (1.0 - ξ[2])
-        ∇φ_ξ[q, 2, 2] = -0.25 * (1.0 + ξ[1])
-        #
-        ∇φ_ξ[q, 3, 1] = 0.25 * (1.0 + ξ[2])
-        ∇φ_ξ[q, 3, 2] = 0.25 * (1.0 + ξ[1])
-        #
-        ∇φ_ξ[q, 4, 1] = -0.25 * (1.0 + ξ[2])
-        ∇φ_ξ[q, 4, 2] = 0.25 * (1.0 - ξ[1])
-    end
+function quad4_shape_function_gradients(ξ::Vector{T}) where {T <: Real}
+    ∇φ_ξ = zeros(T, 4, 2)
+    ∇φ_ξ[1, 1] = -0.25 * (1.0 - ξ[2])
+    ∇φ_ξ[1, 2] = -0.25 * (1.0 - ξ[1])
+    #
+    ∇φ_ξ[2, 1] =  0.25 * (1.0 - ξ[2])
+    ∇φ_ξ[2, 2] = -0.25 * (1.0 + ξ[1])
+    #
+    ∇φ_ξ[3, 1] = 0.25 * (1.0 + ξ[2])
+    ∇φ_ξ[3, 2] = 0.25 * (1.0 + ξ[1])
+    #
+    ∇φ_ξ[4, 1] = -0.25 * (1.0 + ξ[2])
+    ∇φ_ξ[4, 2] =  0.25 * (1.0 - ξ[1])
     return ∇φ_ξ
 end
 
