@@ -28,6 +28,10 @@ struct Quadrature
     w::Vector{Float64}
 end
 
+function Quadrature(quadrature_settings::Dict{Any, Any}, element_type::String)
+    return Quadrature(element_type, quadrature_settings["quadrature order"])
+end
+
 """
     Quadrature(element_type::String, q_order::Int64)
 Init method for Quadrature
@@ -40,7 +44,6 @@ function Quadrature(element_type::String, q_order::Int64)
     ξ, w = getfield(Quadratures, method_symbol)(q_order)
     return Quadrature(ξ, w)
 end
-
 """
     Base.getindex(q::Quadrature, index::Int64)
 # Arguments

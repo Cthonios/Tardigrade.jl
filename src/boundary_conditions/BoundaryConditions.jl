@@ -32,10 +32,10 @@ function ConstantDirichletBC()
 
 end
 
-function setup_dirichlet_bcs(mesh::AbstractMesh)
-    for node_set in mesh.node_sets
+function setup_dirichlet_bcs(mesh::AbstractMesh, bcs::Vector{Dict{Any, Any}})
+    # for node_set in mesh.node_sets
 
-    end 
+    # end 
 end
 
 end # module

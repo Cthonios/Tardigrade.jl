@@ -16,3 +16,6 @@ include("TestMeshes.jl")
 include("TestQuadratures.jl")
 include("TestShapeFunctions.jl")
 include("TestStaticQuadratures.jl")
+
+# eventually add this to some regression test workflow
+include("TestPoissonProblem.jl")

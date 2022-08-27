@@ -2,6 +2,7 @@ module Meshes
 
 export AbstractMesh
 export ExodusMesh
+export Mesh
 export SingleBlockExodusMesh
 
 export element_level_connectivity
@@ -19,6 +20,15 @@ abstract type AbstractMesh end
 Parent type for all different exodus meshes.
 """
 abstract type AbstractExodusMesh <: AbstractMesh end
+
+""" 
+    Mesh(mesh_settings::Dict{Any, Any})
+
+"""
+function Mesh(mesh_settings::Dict{Any, Any})
+    type_symbol = Symbol(mesh_settings["type"])
+    return getfield(Meshes, type_symbol)(mesh_settings["file name"])
+end
 
 """
     SingleBlockExodusMesh{I, F}

@@ -1,5 +1,6 @@
 module Tardigrade
 
+export BoundaryConditions
 export Elements
 export Fields
 export Meshes

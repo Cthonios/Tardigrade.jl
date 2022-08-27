@@ -1,23 +1,20 @@
 mesh:
-  type: exodus
+  type: SingleBlockExodusMesh
   file name: './mesh/mesh_test_0.125.g'
 
-sections:
-  - block: 1
-    quadrature order: 2
+shape functions:
+  type: LagrangeShapeFunction
+
+quadrature:
+  type: Quadrature
+  quadrature order: 1
 
 boundary conditions:
-  - type: zero
-    node set: 1
-  - type: zero
-    node set: 2
-  - type: zero
-    node set: 3
-  - type: zero
-    node set: 4
-
-kernels:
-  - type: poisson
-
-
-
+  - type: ConstantDirichletBC
+    node set id: 1
+  - type: ConstantDirichletBC
+    node set id: 2
+  - type: ConstantDirichletBC
+    node set id: 3
+  - type: ConstantDirichletBC
+    node set id: 4

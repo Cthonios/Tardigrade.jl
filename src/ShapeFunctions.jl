@@ -5,6 +5,7 @@ A module for working with FEM shape functions.
 module ShapeFunctions
 
 export AbstractShapeFunction
+export ShapeFunction
 export LagrangeShapeFunction
 export J
 export J!
@@ -26,6 +27,11 @@ import ..Elements: quad4_shape_function_gradients!
 Parent type of all shape functions.
 """
 abstract type AbstractShapeFunction end
+
+function ShapeFunction(shape_function_settings::Dict{Any, Any}, element_type::String)
+    type_symbol = Symbol(shape_function_settings["type"])
+    return getfield(ShapeFunctions, type_symbol)(element_type)
+end 
 
 """
     LagrangeShapeFunction
