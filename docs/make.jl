@@ -3,14 +3,15 @@ push!(LOAD_PATH, "../src/")
 using Tardigrade
 
 pages = [
-    "Home"              => "index.md",
-    "Table of Contents" => "toc.md",
-    "Tardigrade"        => "Tardigrade.md",
-    "Elements"          => "Elements.md",
-    "Fields"            => "Fields.md",
-    "Meshes"            => "Meshes.md",
-    "Quadratures"       => "Quadratures.md",
-    "ShapeFunctions"    => "ShapeFunctions.md"
+    "Home"               => "index.md",
+    "Table of Contents"  => "toc.md",
+    "Tardigrade"         => "Tardigrade.md",
+    "BoundaryConditions" => "BoundaryConditions.md",
+    "Elements"           => "Elements.md",
+    "Fields"             => "Fields.md",
+    "Meshes"             => "Meshes.md",
+    "Quadratures"        => "Quadratures.md",
+    "ShapeFunctions"     => "ShapeFunctions.md"
 ]
 
 makedocs(

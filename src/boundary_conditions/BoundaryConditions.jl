@@ -1,3 +1,6 @@
+"""
+    BoundaryConditions
+"""
 module BoundaryConditions
 
 export AbstractBC
@@ -12,28 +15,55 @@ using Base
 using Exodus
 using ..Meshes
 
+"""
+    AbstractBC
+"""
 abstract type AbstractBC end
+"""
+    AbstractDirichletBC
+"""
 abstract type AbstractDirichletBC <: AbstractBC end
 
+"""
+    update_residual!(R::Vector{F}, bc::AbstractDirichletBC) where {F <: Real}
+"""
 function update_residual!(R::Vector{F}, bc::AbstractDirichletBC) where {F <: Real}
     error("you need to define update_residual! for this type")
 end
 
 # this is for a dense matrix, stupid but easy to start with
-function update_jacobian!(K::Matrix{F}, bc::AbstractDirichletBC) where {F <: Real}
+"""
+    update_jacobian!(K::Matrix{F}, bc::AbstractDirichletBC) where {F <: Real}
+this is for a dense matrix, stupid but easy to start with
+"""
+function update_jacobian!(J::Matrix{F}, bc::AbstractDirichletBC) where {F <: Real}
     error("you need to define update_jacobian! for this type")
 end
 
 # add sparse matrix
 
+"""
+    DirichletBCs
+"""
 struct DirichletBCs 
     bcs::Vector{AbstractDirichletBC}
 end
+"""
+    Base.getindex(bcs::DirichletBCs, bc::I) where {I <: Integer}
+"""
 Base.getindex(bcs::DirichletBCs, bc::I) where {I <: Integer} = bcs.bcs[bc]
+"""
+    Base.iterate(bcs::DirichletBCs, bc=1)
+"""
 Base.iterate(bcs::DirichletBCs, bc=1) = bc > 1 ? nothing : (bcs.bcs[bc], bc + 1)
+"""
+    Base.length(bcs::DirichletBCs)
+"""
 Base.length(bcs::DirichletBCs) = length(bcs.bcs)
 
-
+"""
+    DirichletBCs(bcs_settings::Vector{Dict{Any, Any}}, mesh::AbstractMesh)
+"""
 function DirichletBCs(bcs_settings::Vector{Dict{Any, Any}}, mesh::AbstractMesh)
     bcs = Vector{AbstractDirichletBC}(undef, length(bcs_settings))
     node_set_ids = map(nset -> nset.node_set_id, mesh.node_sets)
