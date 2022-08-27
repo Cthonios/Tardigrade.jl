@@ -12,9 +12,18 @@ quadrature:
 boundary conditions:
   - type: ConstantDirichletBC
     node set id: 1
+    value: 0.0
   - type: ConstantDirichletBC
     node set id: 2
+    value: 0.0
   - type: ConstantDirichletBC
     node set id: 3
+    value: 0.0
   - type: ConstantDirichletBC
     node set id: 4
+    value: 0.0
+
+fields:
+  - name: u
+    type: UncoupledScalarField
+

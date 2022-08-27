@@ -11,6 +11,7 @@ macro tardigrade_test_set(test_name::String, ex)
     end
 end
 
+include("TestBoundaryConditions.jl")
 include("TestFields.jl")
 include("TestMeshes.jl")
 include("TestQuadratures.jl")

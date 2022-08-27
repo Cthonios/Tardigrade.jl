@@ -11,10 +11,5 @@ f(x) = 1.
     mesh = Mesh(input_settings["mesh"])
     shape_functions = ShapeFunction(input_settings["shape functions"], "quad4")
     quadrature = Quadrature(input_settings["quadrature"], "quad4")
-    # bcs = setup_boundary_conditions()
-    # set up BCs here
-    # set up kernels here
-
-    # @show mesh.node_sets
-    # sketching it out for now
+    bcs = DirichletBCs(input_settings["boundary conditions"], mesh)
 end

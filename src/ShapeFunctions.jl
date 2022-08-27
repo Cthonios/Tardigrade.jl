@@ -28,6 +28,9 @@ Parent type of all shape functions.
 """
 abstract type AbstractShapeFunction end
 
+"""
+    ShapeFunction(shape_function_settings::Dict{Any, Any}, element_type::String)
+"""
 function ShapeFunction(shape_function_settings::Dict{Any, Any}, element_type::String)
     type_symbol = Symbol(shape_function_settings["type"])
     return getfield(ShapeFunctions, type_symbol)(element_type)
