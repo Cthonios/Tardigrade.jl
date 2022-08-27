@@ -1,8 +1,8 @@
 using Documenter
 push!(LOAD_PATH, "../src/")
 using Tardigrade
-using Tardigrade.Meshes
-using Tardigrade.Quadratures
+# using Tardigrade.Meshes
+# using Tardigrade.Quadratures
 
 pages = [
     "Home"              => "index.md",

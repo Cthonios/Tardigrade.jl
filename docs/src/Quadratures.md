@@ -1,4 +1,5 @@
-# Quadratures
+# Quadratures and StaticQuadratures
 ```@autodocs
-Modules = [Quadratures,]
+Modules = [Quadratures,
+           StaticQuadratures]
 ```
