@@ -1,21 +1,19 @@
-using Tardigrade.Quadratures
+using Tardigrade.StaticQuadratures
 
-@tardigrade_test_set "Quadratures.jl - Quadrature" begin
-    quadrature = Quadrature("quad4", 1)
+@tardigrade_test_set "StaticQuadratures.jl - StaticQuadrature" begin
+    quadrature = StaticQuadrature("quad4", 1)
 
-    # correctness test, stupid but a sanity check
     @test quadrature.ξ[1, 1] == 0.0
     @test quadrature.ξ[1, 2] == 0.0
-    @test quadrature.w == [4.0]
-    
-    for (ξ, w) in quadrature
-    end
+    @test quadrature.w[1] == 4.
 
     @test length(quadrature) == 1
     @test sum(quadrature.w) == 4.
 
-    # correctness test, stupid but a sanity check
-    quadrature = Quadrature("quad4", 2)
+    for (ξ, w) in quadrature
+    end
+
+    quadrature = StaticQuadrature("quad4", 2)
 
     @test quadrature.ξ[1, 1] == -1.0 / sqrt(3.0)
     @test quadrature.ξ[1, 2] == -1.0 / sqrt(3.0)
@@ -32,7 +30,6 @@ using Tardigrade.Quadratures
     @test quadrature.w == [1.0, 1.0, 1.0, 1.0]
 
     for (ξ, w) in quadrature
-        # just to test looping on this boy
     end
 
     @test length(quadrature) == 4

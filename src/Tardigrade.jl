@@ -10,9 +10,11 @@ export ShapeFunctions
 include("Meshes.jl")
 
 # rest can be alphabetical hopefully
+include("./boundary_conditions/BoundaryConditions.jl")
 include("./elements/Elements.jl")
 include("Fields.jl")
 include("Quadratures.jl")
 include("ShapeFunctions.jl")
 
+include("StaticQuadratures.jl")
 end # module

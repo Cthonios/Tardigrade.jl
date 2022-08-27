@@ -1,3 +1,5 @@
+using StaticArrays
+
 """
     quad4_quadrature_points_and_weights(q_order::Int64)
 Defines quadrature rule for quad4 elements.
@@ -14,6 +16,28 @@ function quad4_quadrature_points_and_weights(q_order::Int64)
                                  1.0 1.0
                                  -1.0 1.0]
         w = [1.0, 1.0, 1.0, 1.0]
+    else
+        quadrautre_order_error(q_order)
+    end
+    return ξ, w
+end
+
+"""
+    quad4_quadrature_points_and_weights_static(q_order::Int64)
+Defines quadrature rule for quad4 elements.
+# Arguments
+- `q_order::Int64`: quadrature order
+"""
+function quad4_quadrature_points_and_weights_static(q_order::Int64)
+    if q_order == 1
+        ξ = SMatrix{1, 2, Float64}(0., 0.) # TODO make parametric
+        w = SVector{1, Float64}(4.)
+    elseif q_order == 2
+        ξ = (1. / sqrt(3.)) * @SMatrix [-1.0 -1.0;
+                                        1.0 -1.0;
+                                        1.0 1.0;
+                                        -1.0 1.0]
+        w = SVector{4, Float64}(1., 1., 1., 1.)
     else
         quadrautre_order_error(q_order)
     end
